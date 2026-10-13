@@ -1,0 +1,40 @@
+<meta charset="utf-8">
+<title>张骞传·出使西域</title>
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&display=swap">
+<style>
+  /* 单一深色像素屏：游戏画面固定为夜色主题，不随系统明暗切换 */
+  :root { --bg: #07060f; --fg: #efe6d0; --key: rgba(239, 230, 208, 0.13); --key-edge: rgba(239, 230, 208, 0.38); --key-on: rgba(255, 216, 112, 0.45); color-scheme: dark; }
+  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  html, body { height: 100%; margin: 0; background: var(--bg); color: var(--fg); overflow: hidden; user-select: none; -webkit-user-select: none; touch-action: none; }
+  #wrap { position: fixed; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; padding-top: env(safe-area-inset-top, 0px); padding-bottom: env(safe-area-inset-bottom, 0px); }
+  #cv { display: block; image-rendering: pixelated; image-rendering: crisp-edges; background: #000; max-width: 100%; }
+  #pad { display: none; position: relative; width: 100%; max-width: 520px; height: 180px; flex: none; padding-inline: 16px; }
+  body.touch #pad { display: block; }
+  .k { position: absolute; display: flex; align-items: center; justify-content: center; background: var(--key); border: 2px solid var(--key-edge); color: var(--fg); font: bold 22px/1 sans-serif; border-radius: 12px; touch-action: none; }
+  .k.on { background: var(--key-on); }
+  .d { width: 58px; height: 58px; }
+  .ab { border-radius: 50%; width: 76px; height: 76px; font-size: 26px; }
+</style>
+<div id="wrap">
+  <canvas id="cv" aria-label="游戏画面"></canvas>
+  <div id="pad">
+    <div class="k d" data-k="up" style="left:82px;top:6px">▲</div>
+    <div class="k d" data-k="left" style="left:20px;top:64px">◀</div>
+    <div class="k d" data-k="right" style="left:144px;top:64px">▶</div>
+    <div class="k d" data-k="down" style="left:82px;top:122px">▼</div>
+    <div class="k ab" data-k="b" style="right:120px;top:84px">B</div>
+    <div class="k ab" data-k="a" style="right:24px;top:40px">A</div>
+  </div>
+</div>
+<script charset="utf-8" src="js/engine/core.js"></script>
+<script charset="utf-8" src="js/engine/audio.js"></script>
+<script charset="utf-8" src="js/engine/gfx.js"></script>
+<script charset="utf-8" src="js/engine/buildings.js"></script>
+<script charset="utf-8" src="js/engine/state.js"></script>
+<script charset="utf-8" src="js/engine/world.js"></script>
+<script charset="utf-8" src="js/engine/cards.js"></script>
+<script charset="utf-8" src="js/engine/menu.js"></script>
+<script charset="utf-8" src="js/engine/quest.js"></script>
+<script charset="utf-8" src="js/story/zhangqian.js"></script>
+<script charset="utf-8" src="js/engine/main.js"></script>

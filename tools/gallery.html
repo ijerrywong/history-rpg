@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><title>造型画廊</title>
+<style>
+  :root { --bg: #86bc5a; --fg: #1a1a1a; color-scheme: light; }
+  body { margin: 0; padding: 16px; background: var(--bg); color: var(--fg); font: 14px/1.5 -apple-system, "PingFang SC", sans-serif; }
+  h2 { margin: 24px 0 8px; } .grid { display: flex; flex-wrap: wrap; gap: 20px; align-items: flex-end; }
+  figure { margin: 0; text-align: center; } canvas { image-rendering: pixelated; display: block; } #cv { display: none; }
+</style></head>
+<body>
+<!-- 造型画廊：浏览器打开 tools/gallery.html（需要本地服务器，例如 python3 -m http.server），
+     看 js/engine/buildings.js 里全部建筑和地标。新增造型后在这里对比，再放进城镇。 -->
+<canvas id="cv"></canvas>
+<h2>城镇建筑 BUILDINGS（剧本里写 art: '名字'）</h2><div class="grid" id="b"></div>
+<h2>世界地图地标 LANDMARKS（LOCS 写 art，关卡用 GATE_ART）</h2><div class="grid" id="l"></div>
+<script src="../js/engine/core.js"></script>
+<script src="../js/engine/gfx.js"></script>
+<script src="../js/engine/buildings.js"></script>
+<script>
+  function show(box, name, img, fx, top) {
+    const f = document.createElement('figure'), c = document.createElement('canvas');
+    c.width = img.width; c.height = img.height + 40; const x = c.getContext('2d');
+    let t = 0; const draw = () => { x.clearRect(0, 0, c.width, c.height); x.drawImage(img, 0, 0); if (fx) fx(x, 0, top * 3, t); t += 50; };
+    draw(); if (fx) setInterval(draw, 50);
+    f.append(c); const cap = document.createElement('figcaption'); cap.textContent = name; f.append(cap); box.append(f);
+  }
+  for (const [k, A] of Object.entries(BUILDINGS)) show(document.getElementById('b'), k, Gfx.bld(k, {}), A.fx, A.top);
+  for (const [k, A] of Object.entries(LANDMARKS)) { show(document.getElementById('l'), k, Gfx.landmark(k), A.fx, A.top); if (A.draw.length > 1) show(document.getElementById('l'), k + '（打开）', Gfx.landmark(k, { open: true }), null, A.top); }
+</script>
+</body></html>
