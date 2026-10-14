@@ -416,6 +416,7 @@ const MapScene = {
       else if (d.fn) await d.fn(n);
       else { const lines = typeof d.say === 'function' ? d.say() : d.say; await say(d.name || null, lines); }
       if (d.card && (!d.cardIf || d.cardIf())) await getCard(d.card);
+      if (d.learn) await learn(d.learn); // 重生模式：说完给一条消息
       this.refresh();
     } else if (o.type === 'chest') {
       const c = o.c; if (G.flags[c.key]) return;
@@ -549,6 +550,7 @@ async function gateMessage(t) { const g = GATE_MSG[t]; const r = g ? await g() :
 // ===== 剧情工具 =====
 async function chapter(n) {
   F().ch = n;
+  if (isRebirth()) { autosave(); return; } // 重生模式不放章节卡
   const [a, b] = GAME.chapters[n].split(' ');
   await fadeOut(400);
   await card([b, '', a], { big: true });

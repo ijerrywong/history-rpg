@@ -12,7 +12,16 @@ const GAME = {
   tagline: '像素历史角色扮演 · 公元前138年',
   author: '剑宁（jerrywong）',
   license: 'CC BY-NC-SA 4.0',
-  chapters: ['序章 未央宫', '第一章 匈奴十年', '第二章 大宛与月氏', '第三章 归途', '终章 凿空'],
+  // 开局、通关、推演报告末尾的引文（ADR 0003）
+  motto: {
+    text: '人们自己创造自己的历史，但是他们并不是随心所欲地创造，并不是在他们自己选定的条件下创造，而是在直接碰到的、既定的、从过去承继下来的条件下创造。',
+    src: '马克思《路易·波拿巴的雾月十八日》',
+    kid: '历史里的人都能做选择，可他们没法选择自己生在什么时代、手里有什么、知道些什么。',
+    start: '接下来，你就是张骞。你知道的，只有他当时知道的。',
+    clear: '张骞做了他能做的选择。如果换成你，在同样的条件下，会怎么做？',
+    end: '这一次，你在同样的条件下，做了自己的选择。',
+  },
+  chapters: ['序章 未央宫', '第一章 匈奴十年', '第二章 大宛与月氏', '第三章 归途', '终章 凿空', '重生 再走一次'],
   party: ['zhang'],
   titleSprites: ['zhangqian', 'ganfu', 'soldier', 'soldier'],
   titleSky: ['#0a0818', '#3a2438', '#8a4a30'],
@@ -209,6 +218,27 @@ const CARDS = {
   sichou: { ch: 4, fact: true, title: '「丝绸之路」这个名字', src: '近代学者研究',
     text: '汉朝人从来不说「丝绸之路」。这个名字是一千九百多年后的德国学者起的：1838 年李特尔已经用过，1877 年李希霍芬让它出了名。',
     img: { src: 'img/cards/sichou.jpg', cap: '德国地理学家李希霍芬。是他让「丝绸之路」这个名字出了名。', credit: '佚名 · 公有领域 · Wikimedia Commons' } },
+  // ----- 重生线（只在重生模式里拿得到）-----
+  songxia: { ch: 5, rebirth: true, fact: true, title: '一点点松下来', src: '《史记·大宛列传》',
+    text: '张骞在匈奴住了十多年，娶了妻子，有了孩子。匈奴人慢慢不再那么紧地看着他。张骞一直留着汉节。机会一来，他就带着手下人往西逃。' },
+  liangben: { ch: 5, rebirth: true, fact: true, title: '两本书不一样', src: '《史记·大宛列传》《汉书·张骞传》',
+    text: '《史记》说张骞逃走前，看守变松了。《汉书》在同一个地方，却写他「住在匈奴西边」。两本古书写法不同，所以我们不能说得太肯定。' },
+  liangci: { ch: 5, rebirth: true, fact: true, title: '两次出使带的东西不一样', src: '《史记·大宛列传》',
+    text: '第一次出使，史书只写了一百多人，没写带了什么礼物。第二次去乌孙，张骞带了三百人，每人两匹马，几万头牛羊，还有很多金子和丝绸。' },
+  wusun: { ch: 5, rebirth: true, fact: true, title: '乌孙也说「再想想」', src: '《史记·大宛列传》',
+    text: '很多年后，张骞带着大批财物去劝乌孙搬回东边。乌孙王老了，国家分成几块，大臣都怕匈奴，也不知道汉朝有多大。所以乌孙没答应。' },
+  kanyikan: { ch: 5, rebirth: true, fact: true, title: '看一看就明白了', src: '《史记·大宛列传》',
+    text: '乌孙派了几十个使者，跟张骞到汉朝看看。他们看到汉朝人多、富有，回去一说，乌孙就开始看重汉朝了。' },
+  jiemeng: { ch: 5, rebirth: true, fact: true, title: '结盟以后', src: '《汉书·西域传》《汉书·匈奴传》',
+    text: '汉朝公主一位接一位嫁到乌孙。公元前71年，汉朝和乌孙一起打匈奴，匈奴从此衰弱了。这时离张骞去乌孙，已经过了大约五十年。' },
+  huijia: { ch: 5, rebirth: true, fact: true, title: '回家的路选哪条', src: '《史记·大宛列传》',
+    text: '回来时，张骞沿着南边的大山走，想从羌人住的地方回汉朝，可还是被匈奴抓住了。那时河西一带还是匈奴的地方。他为什么选这条路，史书没写。' },
+  hexi: { ch: 5, rebirth: true, fact: true, title: '河西什么时候变成汉朝的', src: '《汉书·武帝纪》《史记·大宛列传》',
+    text: '张骞回来五年后，匈奴的浑邪王投降了汉朝。从那以后，河西走廊不再有匈奴人。汉朝在这里设了郡（郡：地方上的行政区）。' },
+  shendu: { ch: 5, rebirth: true, fact: true, title: '身毒在哪里', src: '《史记·大宛列传》',
+    text: '张骞在大夏看到四川的竹杖和布。大夏人说，是商人从东南边的身毒买来的。身毒在大夏东南几千里，又湿又热，人们骑着大象打仗。' },
+  xinan: { ch: 5, rebirth: true, fact: true, title: '西南的路没走通', src: '《史记·大宛列传》',
+    text: '张骞回来后说，从蜀地去大夏，路近又没有强盗。汉武帝派人从蜀地分四路去找身毒，都被昆明等部族挡住。试了很多年，始终没有走通。' },
 };
 
 // ===== 章末小结 =====
@@ -386,7 +416,7 @@ const TOWNS = {
     ],
     decor: ['plaza', 'trees', 'garden'],
     npcs: [
-      { sp: 'dxman', name: '大夏商人', x: 4, y: 6, card: 'qiongzhu', say: ['客人，看看这根竹杖，节又高又直！还有这匹布，结实得很。', '从哪儿来的？是商人从东南边的身毒买来的。'] },
+      { sp: 'dxman', name: '大夏商人', x: 4, y: 6, card: 'qiongzhu', learn: 'shendu', say: ['客人，看看这根竹杖，节又高又直！还有这匹布，结实得很。', '从哪儿来的？是商人从东南边的身毒买来的。'] },
       { sp: 'merchant', name: '钱币商', x: 15, y: 6, card: 'yinbi', say: ['你见过安息国的银币吗？上面印着国王的脸！', '国王死了，就换一种新钱。可惜我手里这枚，你看不出是哪个国王了。'] },
       { sp: 'dychild', name: '大夏小孩', x: 9, y: 12, say: ['我爹说，你们是从太阳升起的地方来的？'] },
     ],
@@ -415,6 +445,48 @@ const QUESTS = {
     done: ['就是它！你们看，马闻到味道就跑过来了！', '告诉你们一个秘密：我们大宛的马，有的流的汗是红的……'],
     after: '吃饱了苜蓿，马跑得更快了！',
     reward: { cards: ['hanxue'] } },
+};
+
+// ===== 重生（大纲见 docs/zhangqian/outline.md「重生线大纲」；史实依据见 facts.md「重生线专项」）=====
+// 随从人数、口粮数值是游戏设定，史书没写
+const REBIRTH = {
+  res: [
+    { id: 'men', name: '随从', start: 10 },
+    { id: 'jie', name: '汉节', bool: true, get: () => hasItem('jie') ? 1 : 0 },
+    { id: 'promise', name: '许诺', start: 3 },
+    { id: 'food', name: '口粮', start: 6 },
+    { id: 'know', name: '消息', get: () => Object.keys(G.know).length },
+  ],
+  know: {
+    hate: '月氏被匈奴打败，恨匈奴（出发前就知道）',
+    north: '单于说：月氏在匈奴的北边',
+    loose: '这些年，看守越来越松了',
+    rich: '大宛早就听说汉朝很富有',
+    moved: '大月氏已经搬到很远的西边，住在妫水旁',
+    anle: '月氏这里土地肥、强盗少，日子过得安乐',
+    far: '月氏人觉得汉朝离他们太远',
+    shendu: '大夏东南几千里，有个身毒国，那里卖蜀地的货物',
+    more: '西域还有五六个大国（是听人说的）',
+    roads: '大宛、康居、大月氏、大夏之间怎么走',
+  },
+  reflect: { q: '这一次，哪个条件是你最选不了的？', opts: ['匈奴挡在去西域的路上', '月氏已经过上了安乐的日子', '单于什么时候死、匈奴什么时候乱'] },
+  async intro() {
+    G.party = ['zhang', 'gan']; addItem('jie');
+    Object.assign(F(), { ch: 1, appointed: 1, ganJoined: 1 });
+    G.know.hate = 1;
+    Snd.play('sad');
+    await card(['重生', '', '再走一次出使的路'], { big: true });
+    await card(['你和甘父刚被匈奴扣下，', '押到了单于的营地。', '一百多人的使团，现在剩下十个随从。'], { lh: 46 });
+    await card(['这一次，每一步都由你来决定。', '走之前，先看看手里还有什么，', '还知道些什么。'], { lh: 46 });
+    const p = doorPos('xiongnu', 0);
+    Fade.a = 1;
+    Scene = MapScene; MapScene.enter('town:xiongnu', p.x, p.y, 'down');
+    await fadeIn(600);
+    Snd.play(MapScene.musicFor());
+    await narr(['（右上角是你手里的东西：随从、汉节、许诺、口粮、消息。）', '（「消息」要靠自己打听。没打听到的事，有些选项就选不了。）']);
+    await say('甘父', ['张大人，先在营地里四处看看、问问吧。', '想好了，就回「你的毡帐」，决定什么时候走。']);
+    autosave();
+  },
 };
 
 // ===== 剧情 =====
@@ -486,11 +558,16 @@ const STORY = {
     autosave();
   },
   async chanyuTent() {
+    if (isRebirth() && !F().tenYears && !knows('north')) {
+      await say('单于', ['汉朝的使者，还想着去月氏？', '月氏在我们北边！汉朝的人，怎么能从我的地盘上过去？']);
+      await learn('north'); return;
+    }
     if (F().captured2) { await narr('（大帐外站满了卫兵。听说单于病得很重，谁也不许进去。）'); return; }
     if (F().tenYears) { await narr('（单于大帐里正在喝酒唱歌，没人理会你。）'); return; }
     await say('单于', ['又是你。还想着去月氏？', '留在草原吧。这里有吃不完的羊肉，喝不完的马奶。']);
   },
   async home() {
+    if (isRebirth()) return STORY.rbHome();
     if (!F().tenYears) {
       const seen = ['qionglu', 'youmu', 'food'].filter(hasCard).length;
       if (seen < 2) { await narr(['你在毡帐里坐了一会儿，心里想着月氏。', '（先出去走走，看看匈奴人是怎么生活的吧。）']); return; }
@@ -517,6 +594,7 @@ const STORY = {
     Snd.play(MapScene.musicFor());
     await fadeIn(900);
     await say('甘父', ['张大人，你发现了吗？这些年，看守越来越松了。', '他们以为我们早就死心了……', '找个夜里，我们走吧。往西去，去找月氏！']);
+    if (isRebirth()) { await learn('loose'); await getCard('songxia'); await getCard('liangben'); }
     await narr('（和家人说说话吧。准备好了，就回「你的毡帐」。）');
     autosave();
   },
@@ -554,8 +632,10 @@ const STORY = {
     await narr('（史书里，大宛王只留下了这一句话：「若欲何之？」——你要到哪里去？）');
     await getCard('dywang');
     await say('张骞', ['我替汉朝出使月氏，路被匈奴挡住，被关了十多年，好不容易才逃出来。', '请大王派人送我去月氏。等我回到汉朝，汉朝送给大王的财物，多得说不完！']);
+    if (isRebirth()) { await learn('rich'); await addRes('promise', -1, '许诺回汉朝后重谢大宛王'); }
     await say('大宛王', ['好！我派最好的向导和翻译，送你们去！']);
     await getCard('chengnuo');
+    if (isRebirth()) await addRes('food', 2, '大宛王送了干粮');
     F().gate2 = 1;
     Snd.play(MapScene.musicFor());
     await narr('（有向导带路了。出城往西翻过山路，先去北边的康居。）');
@@ -566,6 +646,7 @@ const STORY = {
     await narr(['康居的营帐散在草原上。康居人和匈奴人一样，赶着牛羊四处搬家。', '大宛的向导走上前，用当地话说明了来意。']);
     await say('康居人', ['汉朝的使者？大宛送来的客人，就是我们的客人。', '月氏的王庭在南边的大河旁。我们派人接着送你们去！']);
     await getCard('chuansong');
+    await learn('moved');
     F().kangju = 1;
     await narr('（往南走，大月氏的王庭就在妫水北边。）');
     autosave();
@@ -580,6 +661,7 @@ const STORY = {
     await say('张骞', ['汉朝愿意和大月氏一起，夹击匈奴，为老王报仇！']);
     await say('月氏大臣', ['……这里的土地肥，又没有敌人，大家过得很安乐。', '汉朝离这里太远了。报仇的事，还是算了吧。']);
     await getCard('anle');
+    await learn('anle'); await learn('far');
     await say('张骞', '……我不死心。我再想想办法！');
     F().yuezhi = 1;
     Snd.play(MapScene.musicFor());
@@ -595,6 +677,7 @@ const STORY = {
   async dxInn() {
     if (F().ch >= 3) { await rest({ keeper: '客舍老板', ask: '客人，要歇一歇吗？' }); return; }
     if (!['lanshi', 'qiongzhu', 'yinbi'].some(hasCard)) { await narr('（先去市场转转，看看大夏人都卖些什么吧。）'); return; }
+    if (isRebirth()) return STORY.rbDaxia();
     const c = await ask('甘父', '张大人，我们在大夏已经住了一年多了，月氏还是不肯答应……回汉朝吧？', ['回汉朝', '再住一阵']);
     if (c !== 0) { await say('甘父', '好，再等等看。'); return; }
     await fadeOut(600);
@@ -619,6 +702,7 @@ const STORY = {
     await narr('（甘父拉开弓——嗖！远处的一只野羊应声倒下。）');
     await say('张骞', ['好箭法！今晚有烤肉吃了！', '甘父，这一路要是没有你，我们早就饿死了。']);
     await getCard('sheshou');
+    if (isRebirth()) await addRes('food', 3, '甘父射到了野羊');
     F().hunt = 1;
     await narr('（继续往东走，前面就是羌人住的地方。）');
     autosave();
@@ -628,7 +712,11 @@ const STORY = {
     await narr(['羌中的山谷里，牧人的营帐星星点点。', '再往东走，就是汉朝了——']);
     Snd.sfx('encounter'); Shake.start(8, 700);
     await narr(['马蹄声！是匈奴的骑兵！', '你们又被抓住了。']);
+    await STORY.recapture(3);
+  },
+  async recapture(loss) {
     F().captured2 = 1; F().gate7 = 0;
+    if (isRebirth()) await addRes('men', -loss, '被抓时走散了');
     await fadeOut(600);
     await card(['你们又被押回了匈奴的营地。'], { auto: 2600 });
     const p = doorPos('xiongnu', 0);
@@ -636,8 +724,8 @@ const STORY = {
     Scene = MapScene; MapScene.enter('town:xiongnu', p.x, p.y, 'up');
     await fadeIn(600);
     Snd.play('sad');
-    await say('胡妻', ['……你回来了。', '我就知道，我们还会再见的。']);
-    await say('张骞', '这一次，我们一起走。');
+    if (G.party.includes('huqi')) await say('胡妻', ['又回到这里了……', '别怕。我们一起等机会。']);
+    else { await say('胡妻', ['……你回来了。', '我就知道，我们还会再见的。']); await say('张骞', '这一次，我们一起走。'); }
     Snd.play(MapScene.musicFor());
     await narr('（回「你的毡帐」歇着，等待机会。）');
     autosave();
@@ -654,9 +742,9 @@ const STORY = {
     await getCard('luan');
     await fadeIn(600);
     await say('甘父', '张大人，就是现在！');
-    await say('胡妻', '我跟你们走！');
     F().escaped2 = 1; F().gate3 = 1;
-    await joinParty('huqi');
+    if (!G.party.includes('huqi')) { await say('胡妻', '我跟你们走！'); await joinParty('huqi'); }
+    if (isRebirth()) await addRes('men', -2, '乱中走散了');
     await fadeOut(600);
     await card(['你们骑上马，趁乱冲出了营地……'], { auto: 2600 });
     await toWorldAt('X');
@@ -664,9 +752,150 @@ const STORY = {
     await narr('（汉朝边塞的关城，就在东边。）');
     autosave();
   },
+  // ===== 重生：三个决策点和四个结局 =====
+  async rbHome() {
+    if (!F().d1) {
+      const c = await decide('d1', '甘父', '张大人，我们被关在这里了。什么时候走？', [
+        { label: '现在就走', why: [{ t: '越早走，越早到月氏' }, { t: '皇上在等消息，不能拖', card: 'zhaomu' }] },
+        { label: '等看守松了再走', why: [{ t: '现在看守太紧，跑不掉', card: 'chanyu' }, { t: '先学会匈奴话，认得草原的路' }] },
+        { label: '不走了，留在草原', why: [{ t: '路太远，太危险了' }, { t: '在草原上也能活下去', card: 'food' }] },
+      ]);
+      F().d1 = c + 1;
+      if (c === 2) return STORY.rbEndC('grass');
+      if (c === 0) {
+        await fadeOut(500); Snd.sfx('encounter'); Shake.start(8, 700);
+        await card(['那一夜，你们偷偷牵出了马……', '可是没跑出多远，匈奴的骑兵就追上来了。'], { lh: 46 });
+        await fadeIn(500);
+        await addRes('men', -3, '被追回时走散了');
+        await narr('（这一段是推演：史书没写张骞早早逃跑过。）');
+        await say('甘父', '看守更紧了……只好再等等。');
+      }
+      await STORY.tenYears();
+      return;
+    }
+    if (F().captured2 && !F().escaped2) return STORY.chaos();
+    if (F().escaped) return;
+    const c = await decide('family', '胡妻', '（今晚就走。妻子和孩子怎么办？）', [
+      { label: '带上妻儿一起走', why: [{ t: '一家人不能分开' }, { t: '她会说匈奴话，路上用得着', card: 'wife' }] },
+      { label: '自己先走，以后再说', why: [{ t: '带着孩子走不快，会被追上' }, { t: '草原是她的家，她在这里更安全' }] },
+    ]);
+    await narr('（史书没写张骞第一次逃走时，妻儿有没有一起走。）');
+    await fadeOut(800);
+    Snd.play('dungeon');
+    await card(['那一夜，没有月亮。'], { auto: 2400 });
+    await card(['你握紧汉节，和甘父、随从们一起，', '悄悄牵出了马……'], { lh: 46 });
+    F().escaped = 1; F().gate7 = 1;
+    await getCard('escape');
+    await toWorldAt('X');
+    if (c === 0) { await joinParty('huqi'); await addRes('food', -1, '多带了家人，口粮吃得快'); }
+    await addRes('food', -2, '往西走了几十天');
+    await say('甘父', ['往西！一直往西！', '穿过那道哨卡，就是去大宛的路了！']);
+    autosave();
+  },
+  async rbDaxia() {
+    if (F().d3) return;
+    await fadeOut(600);
+    await card(['你们在大夏住了一年多。', '这一天，你决定最后一次去见月氏的大臣。'], { lh: 46 });
+    await fadeIn(600);
+    const c2 = await decide('d2', '张骞', '（最后一次劝月氏。怎么劝？）', [
+      { label: '讲报仇：一起打匈奴，为老王报仇', why: [{ t: '月氏恨匈奴，出发前就知道', card: 'yuezhi' }] },
+      { label: '许诺重礼：汉朝会送很多财物', cost: { promise: 2 }, why: [{ t: '大宛就是因为许诺才帮我们的', card: 'chengnuo' }, { t: '谁都喜欢好东西' }] },
+      { label: '请月氏派人跟我回汉朝看看', need: 'far', why: [{ t: '他们觉得汉朝太远，那就亲眼来看看' }, { t: '光靠嘴说，别人不会信' }] },
+      { label: '不劝了，把西域的路和国家都记下来', why: [{ t: '月氏过得安乐，劝不动了', card: 'anle' }, { t: '这些消息，皇上一定用得着' }] },
+    ]);
+    F().d2 = c2 + 1;
+    if (c2 === 0) await say('月氏大臣', ['老王的仇，我们记着。', '可这里土地肥，又没有敌人。汉朝那么远，打起仗来谁帮我们？']);
+    if (c2 === 1) {
+      await say('月氏大臣', ['汉朝的财物？听起来很好。', '可汉朝在哪儿，我们都没见过。为了几句许诺去打匈奴？不行。']);
+      await getCard('liangci');
+      await narr('（很多年后，张骞带着大批财物去劝乌孙，也没能说动。）');
+      await getCard('wusun');
+    }
+    if (c2 === 2) {
+      await say('月氏大臣', ['……去汉朝看看？', '好吧。我们派两个人跟你走。要是汉朝真像你说的那么大，我们再商量。']);
+      F().envoys = 1;
+      await narr('（这一段是推演：历史上月氏没有派人跟张骞走。依据是后来乌孙的使者到汉朝看过以后，乌孙开始看重汉朝。）');
+      await getCard('kanyikan');
+    }
+    if (c2 === 3) {
+      await say('张骞', ['劝不动，就不劝了。', '西域的路、西域的国家，我要一样一样记下来！']);
+      await learn('more'); await learn('roads');
+    }
+    await getCard('yaoling');
+    const c3 = await decide('d3', '甘父', '张大人，该回汉朝了。走哪条路？', [
+      { label: '沿南边的大山，从羌人住的地方走', cost: { food: 2 }, why: [{ t: '躲开匈奴的草原' }, { t: '甘父会打猎，路上饿不着', card: 'ganfu' }] },
+      { label: '往北，直接穿过匈奴的草原', cost: { food: 1 }, why: [{ t: '这条路最近' }, { t: '我们会说匈奴话，能混过去' }] },
+      { label: '往东南，绕道身毒回蜀地', cost: { food: 3 }, need: 'shendu', why: [{ t: '身毒卖蜀地的货，离蜀应该不远', card: 'qiongzhu' }, { t: '那边没有匈奴' }] },
+      { label: '不回去了，留在大夏', why: [{ t: '大夏安稳，又热闹', card: 'lanshi' }, { t: '回去的路太危险' }] },
+    ]);
+    F().d3 = c3 + 1;
+    if (c3 === 3) return STORY.rbEndC('daxia');
+    if (c3 === 2) return STORY.rbEndD();
+    await chapter(3);
+    if (c3 === 0) {
+      await say('甘父', ['这次别走匈奴的草原了。', '我们沿着南边的大山走，从羌人住的地方绕回汉朝！']);
+      F().gate6 = 1;
+      await getCard('nanshan'); await getCard('huijia');
+      await narr('（出了城往南，雪山的路打开了。）');
+      autosave(); return;
+    }
+    await say('甘父', '往北！穿过草原，最快就能到家！');
+    await fadeOut(500);
+    await card(['你们往北走了没几天……'], { auto: 2400 });
+    await fadeIn(300);
+    Snd.sfx('encounter'); Shake.start(8, 700);
+    await narr(['马蹄声！草原上到处是匈奴的骑兵。', '你们又被抓住了。']);
+    await narr('（张骞回国后对汉武帝说过：往北走，会被匈奴抓住。可那是他回来以后才说的。）');
+    await getCard('huijia');
+    await STORY.recapture(5);
+  },
+  async rbHome2() {
+    F().homeBack = 1;
+    const men = res('men'), used = 3 - res('promise'), wife = G.party.includes('huqi');
+    const who = `张骞、甘父${wife ? '、胡妻' : ''}${men > 0 ? `，还有 ${men} 个随从` : ''}`;
+    const north = F().d3 === 2;
+    await narr(['长安！你们回来了。', `一起回来的有：${who}。`]);
+    await getCard('hexi');
+    if (F().envoys) {
+      await narr(['两个月氏使者睁大了眼睛：', '这么大的城，这么多的人……汉朝原来这么大！']);
+      await getCard('jiemeng');
+      return endRebirth({
+        title: '带回月氏使者', type: '合理推演',
+        lines: [`一起回来的有：${who}，还有两个月氏使者。`, '月氏使者亲眼看到了汉朝有多大。', `一路上你用汉朝的名义许诺了 ${used} 次，回到汉朝，这些许诺才有机会兑现。`, '可是，月氏离汉朝太远了。看重汉朝，不等于马上就会出兵打匈奴。'],
+        compare: ['正史里，月氏没有派人跟张骞回来。这个结局是推演的。', '推演的依据：后来乌孙的使者到汉朝看过以后，乌孙开始看重汉朝（史实）。', '可乌孙从看重汉朝，到真的和汉朝一起打匈奴，用了大约五十年，还经过了两代和亲。结盟不会一下子成功。', north ? '你选了北道。「往北会被匈奴抓住」是张骞回来以后才说的，出发时谁也不知道。' : '回家的路上又被匈奴抓住，和正史一样。', '随从人数、口粮是游戏设定，史书没写。'],
+      });
+    }
+    return endRebirth({
+      title: '十三年，两人还', type: '史实',
+      lines: [`一起回来的有：${who}。`, `一路上你用汉朝的名义许诺了 ${used} 次，回到汉朝，这些许诺才有机会兑现。`, `你带回了 ${res('know')} 条西域的消息。`, '没能说服月氏。可西域的路，从此有人走过了。'],
+      compare: ['和正史一样：张骞没能说服月氏，又被匈奴抓了一次，最后趁乱逃回长安。', '正史里，一百多人出发，十三年后只回来张骞和堂邑父两个人。', men > 0 ? `你这一局多回来了 ${men} 个随从。随从人数是游戏设定，史书没写路上怎么减员。` : '你的随从也全走散了，和正史一样。', north ? '你选了北道。「往北会被匈奴抓住」是张骞回来以后才说的，出发时谁也不知道。' : '张骞为什么选南山这条路，史书没写。', '就算回来了，河西还在匈奴手里。五年后浑邪王投降，河西才归了汉朝。'],
+    });
+  },
+  async rbEndC(where) {
+    const grass = where === 'grass';
+    await fadeOut(800);
+    await card(grass ? ['你留在了草原上。', '放羊、骑马，日子一年一年过去。', '那根汉节，挂在毡帐的角落里。'] : ['你留在了大夏。', '市场热热闹闹，日子安安稳稳。', '可汉朝，再也没有你的消息。'], { lh: 46 });
+    return endRebirth({
+      title: grass ? '留在了草原' : '留在了大夏', type: '历史上没有发生',
+      lines: [grass ? '你没有去找月氏，一直留在匈奴的草原上。' : '你见过了月氏和大夏，却没有回汉朝。', `用汉朝的名义许下的 ${3 - res('promise')} 次许诺，全部落空了。`, '汉朝少了第一个亲眼见过西域的人。'],
+      compare: ['正史里，张骞两次从匈奴逃走，最后回到了汉朝。', '如果张骞没回来，会怎样？史家没有推演过，游戏也只说到这里，不替历史补答案。', '我们知道的是：《汉书》说「张骞始开西域之迹」——是张骞第一个打开了去西域的路。'],
+    });
+  },
+  async rbEndD() {
+    await fadeOut(800);
+    await card(['你们往东南走，想经过身毒绕回蜀地。', '山越来越高，路越来越窄。'], { lh: 46 });
+    await card(['在西南的大山里，', '当地的部族挡住了去路，不让外人通过。', '你们只好停在半路。'], { lh: 46 });
+    await getCard('shendu'); await getCard('xinan');
+    return endRebirth({
+      title: '西南的路没走通', type: '历史上没有发生',
+      lines: ['你从大夏人那里知道了身毒，想走一条没有匈奴的路。', '可是你们被挡在西南的大山里，回不了汉朝。', `用汉朝的名义许下的 ${3 - res('promise')} 次许诺，没能兑现。`],
+      compare: ['正史里，张骞没有走这条路。', '推演的依据：张骞回国后，汉武帝派人从蜀地分四路去找身毒，都被昆明等部族挡住，「终莫得通」（史实）。', '你在大夏听到的身毒消息是真的。可是知道有一条路，不等于走得通。'],
+    });
+  },
   // ===== 终章 凿空 =====
   async changanBack() {
     if (!F().escaped2 || F().homeBack) return;
+    if (isRebirth()) return STORY.rbHome2();
     F().homeBack = 1;
     await narr(['十三年了。', '长安城还是那么热闹。可是你出发时带走的一百多人，只剩下身边的甘父。']);
     await recap(3);
@@ -709,7 +938,10 @@ const STORY = {
     await fadeOut(400);
     Snd.play('title');
     await card(['张骞传', '— 全剧终 —'], { big: true });
-    await card(['感谢游玩！', '', `你一共收集了 ${cardCount()} / ${Object.keys(CARDS).length} 张史料卡。`, '想集齐全部史料卡？再来一次「新的旅程」吧！'], { lh: 40 });
+    markCleared();
+    await mottoCard(GAME.motto.clear);
+    const main = Object.keys(CARDS).filter(id => !CARDS[id].rebirth);
+    await card(['感谢游玩！', '', `你一共收集了 ${main.filter(hasCard).length} / ${main.length} 张史料卡。`, '标题画面多了「重生」：', '回到关键时刻，换一种选择试试！'], { lh: 40 });
     UI.stack.length = 0;
     titleLoop();
   },

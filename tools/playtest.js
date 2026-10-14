@@ -21,8 +21,8 @@ const fails = [];
     const back = g.R('G !== lastG');
     console.log('结局后回到标题画面：', back ? '是' : '否'); if (!back) fails.push('结局没有回到标题画面');
   }
-  const missing = g.R('Object.keys(CARDS).filter(id => !lastG.cards[id])');
-  console.log(`史料卡：${g.R('Object.keys(CARDS).length') - missing.length} / ${g.R('Object.keys(CARDS).length')}`, missing.length ? '缺：' + missing.join('、') : '');
+  const missing = g.R('Object.keys(CARDS).filter(id => !CARDS[id].rebirth && !lastG.cards[id])'), mainN = g.R('Object.keys(CARDS).filter(id => !CARDS[id].rebirth).length');
+  console.log(`史料卡：${mainN - missing.length} / ${mainN}`, missing.length ? '缺：' + missing.join('、') : '');
   if (spec.allCards !== false && missing.length) fails.push('有史料卡拿不到：' + missing.join('、'));
   const qs = g.R('JSON.stringify(lastG.quests)'); console.log('任务：', qs);
   for (const q of g.R('Object.keys(QUESTS)')) if (!g.R(`lastG.quests[${JSON.stringify(q)}] && lastG.quests[${JSON.stringify(q)}].st === 'done'`)) fails.push('任务没完成：' + q);
@@ -47,6 +47,30 @@ const fails = [];
   }
   if (g.errors.length) fails.push('运行时错误：\n' + g.errors.join('\n'));
   console.log(`虚拟时长 ${g.seconds()} 秒`);
+
+  // —— 重生路径：每条路径用指定的选择（picks）走到结局 ——
+  if (spec.rebirth) {
+    const got = new Set();
+    for (const P of spec.rebirth) {
+      const r = boot(story);
+      await r.pumpUntil(() => r.R('Scene === MapScene') && r.idle());
+      r.R(`markCleared(); globalThis.__picks = ${JSON.stringify(P.picks || {})};
+        const _end = endRebirth; endRebirth = async e => { globalThis.lastRb = { G, e }; return _end(e); };`);
+      await r.act('await startRebirth()');
+      for (const code of P.steps) await r.act(code);
+      const end = r.R('globalThis.lastRb ? lastRb.e.title : null');
+      const choices = r.R('lastRb ? lastRb.G.log.filter(x => x.k === "decide").map(x => x.id + "=" + x.choice).join("；") : ""');
+      const reports = r.R('loadReports().length');
+      r.R('lastRb && Object.keys(lastRb.G.cards).forEach(k => globalThis.__got = (globalThis.__got || []).concat(k))');
+      for (const k of r.R('globalThis.__got || []')) got.add(k);
+      const ok = end === P.ending && reports === 1 && !r.errors.length;
+      console.log(`重生 ${ok ? '✓' : '✗'} ${P.name} → ${end || '没走到结局'}（${choices}）`);
+      if (!ok) fails.push(`重生路径不对：${P.name}（期望「${P.ending}」，实际「${end}」，报告 ${reports} 份）` + (r.errors.length ? '\n' + r.errors.join('\n') : ''));
+    }
+    const rbCards = g.R('Object.keys(CARDS).filter(id => CARDS[id].rebirth)'), lack = rbCards.filter(k => !got.has(k));
+    console.log(`重生史料卡：${rbCards.length - lack.length} / ${rbCards.length}`, lack.length ? '缺：' + lack.join('、') : '');
+    if (lack.length) fails.push('重生路径里拿不到的史料卡：' + lack.join('、'));
+  }
   console.log(fails.length ? '\n不通过：\n- ' + fails.join('\n- ') : '\n全部通过');
   process.exit(fails.length ? 1 : 0);
 })().catch(e => { console.log('失败：', e.message); process.exit(2); });

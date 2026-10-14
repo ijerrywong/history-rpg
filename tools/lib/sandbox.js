@@ -34,7 +34,7 @@ function boot(storyOverride) {
   const R = code => vm.runInContext(code, sb);
   const tick = () => new Promise(r => setImmediate(r));
   async function frame() {
-    R(`(() => { const t = UI.top(); if (t) { if (t instanceof Menu) { const i = t.items.findIndex(x => !x.disabled); if (i >= 0) t.i = i; } Input.hit[globalThis.autoB ? 'b' : 'a'] = true; } })()`);
+    R(`(() => { const t = UI.top(); if (t) { if (t instanceof Menu) { const p = globalThis.__picks || {}, want = t.o.pick != null ? p[t.o.pick] : undefined; const i = want != null && !t.items[want].disabled ? want : t.items.findIndex(x => !x.disabled); if (want != null && t.items[want].disabled) console.error('决策选项是灰的，选不了：' + t.o.pick + ' #' + want); if (i >= 0) t.i = i; } Input.hit[globalThis.autoB ? 'b' : 'a'] = true; } })()`);
     vt += 50;
     for (let i = timers.length - 1; i >= 0; i--) if (timers[i].t <= vt) timers.splice(i, 1)[0].f();
     sb._raf(vt); await tick();

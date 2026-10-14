@@ -4,7 +4,7 @@ const saveKey = slot => `${GAME.id}_save_${slot}`;
 function fmtTime(ms) { const m = Math.floor(ms / 60000); return `${Math.floor(m / 60)}时${String(m % 60).padStart(2, '0')}分`; }
 function saveGame(slot) {
   const meta = { place: MapScene.map ? MapScene.map.name : '', time: G.time, ch: GAME.chapters[G.flags.ch || 0], cards: cardCount() };
-  store(saveKey(slot), JSON.stringify({ G, meta }));
+  store(isRebirth() ? `${GAME.id}_rb_${slot}` : saveKey(slot), JSON.stringify({ G, meta })); // 重生的进度不占正史存档
 }
 function loadSlot(slot) { try { const s = store(saveKey(slot)); return s ? JSON.parse(s) : null; } catch (e) { return null; } }
 function autosave() { if (G) saveGame(0); }
@@ -28,6 +28,7 @@ async function loadMenu(fromTitle) {
   return true;
 }
 async function saveMenu() {
+  if (isRebirth()) { await narr('（重生一局不长，不用存档。）'); return; }
   const items = [1, 2, 3].map(s => { const l = slotLabel(s); return { label: l.label, right: l.right }; });
   const c = await menu(items, { x: 40, y: 140, w: W - 80, title: '保存进度（进城和章节开始时会自动存档）' });
   if (c < 0) return;
@@ -124,6 +125,7 @@ async function enterBuilding(b) {
   if (lines) await say(b.who || null, lines);
   else await narr('屋里没有人。');
   if (b.card && (!b.cardIf || b.cardIf())) await getCard(b.card);
+  if (b.learn) await learn(b.learn);
 }
 
 // ===== 标题画面 =====
@@ -175,16 +177,25 @@ async function titleLoop() {
   Scene = TitleScene; Snd.play('title'); Fade.a = 0;
   for (; ;) {
     const has = [0, 1, 2, 3].some(s => loadSlot(s));
-    const c = await menu([{ label: '新的旅程' }, { label: '继续旅程', disabled: !has }, { label: '游戏设置' }, { label: '操作说明' }, { label: '关于' }], { x: W / 2 - 110, y: 300, w: 220, cancel: false });
-    if (c === 0) {
+    const items = [{ label: '新的旅程', k: 'new' }, { label: '继续旅程', disabled: !has, k: 'load' }];
+    if (hasCleared()) items.push({ label: '重生', k: 'rebirth', color: '#ffd870' });
+    if (hasRebirth() && loadReports().length) items.push({ label: '推演报告', k: 'reports' });
+    items.push({ label: '游戏设置', k: 'set' }, { label: '操作说明', k: 'help' }, { label: '关于', k: 'about' });
+    const lh = items.length > 5 ? 32 : 38;
+    const c = await menu(items, { x: W / 2 - 110, y: Math.min(300, H - 56 - items.length * lh - 30), w: 220, lh, cancel: false });
+    const k = items[c].k;
+    if (k === 'new') {
       newGame();
       await fadeOut(600);
+      if (GAME.motto) await mottoCard(GAME.motto.start);
       await STORY.intro();
       return;
     }
-    if (c === 1) { if (await loadMenu(true)) return; }
-    if (c === 2) await settingsMenu();
-    if (c === 3) await helpScreen();
-    if (c === 4) await aboutScreen();
+    if (k === 'rebirth') { await startRebirth(); return; }
+    if (k === 'load') { if (await loadMenu(true)) return; }
+    if (k === 'reports') await reportsMenu();
+    if (k === 'set') await settingsMenu();
+    if (k === 'help') await helpScreen();
+    if (k === 'about') await aboutScreen();
   }
 }

@@ -137,7 +137,7 @@ class RecapView extends Widget {
   }
 }
 async function recap(ch) {
-  if (!RECAPS[ch]) return;
+  if (!RECAPS[ch] || isRebirth()) return; // 重生模式不放章末小结，结局后有推演报告
   Snd.play('title');
   await fadeOut(400);
   const v = new RecapView(ch); UI.push(v);
