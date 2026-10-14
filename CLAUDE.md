@@ -7,8 +7,12 @@
 - `js/story/<id>.js` —— 一段历史一个剧本（范例：zhangqian.js）
 - `tests/<id>.test.js` —— 试玩脚本；`tests/fixtures/minimal-story.js` —— 引擎独立性用的假题材
 - `img/cards/` —— 史料卡图片（出处在 credits.json，CREDITS.md 由脚本生成）
-- `docs/<id>/` —— 史料核查表和大纲
+- `docs/<id>/` —— 史料核查表和大纲；`docs/adr/` —— 架构决策记录（重生模式、美术方向、开场引文）
+- `docs/private/` —— 商业模式和商业思考，**不进 git**（已在 .gitignore）；商业内容一律写这里，不写进 ADR
 - `tools/` —— playtest.js、engine-check.js、commons.py、pinyin_scan.py、gallery.html
+
+## 授权
+分开授权，详见 `COPYRIGHT.md`：引擎、工具、工序用 MPL-2.0（`LICENSE`）；题材内容（`js/story/`、`docs/`、题材测试和图标）用 CC BY-NC-SA 4.0（`LICENSE-CONTENT`）；图片按 CREDITS.md。新增文件时按这个划分归类，有歧义先问。
 
 ## 常用命令
 ```bash

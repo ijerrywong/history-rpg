@@ -2,3 +2,6 @@ dist/
 .DS_Store
 .cache/
 __pycache__/
+
+# 商业文档，不进 git
+docs/private/
