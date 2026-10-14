@@ -78,12 +78,12 @@
   [self.window makeFirstResponder:self.web]; // 键盘直接进游戏
   [NSApp activateIgnoringOtherApps:YES];
 }
-// 设了环境变量 BAXIAN_DEBUG 时，加载完成后打印页面状态（用于自动测试）
+// 设了环境变量 GAME_DEBUG 时，加载完成后打印页面状态（用于自动测试）
 - (void)webView:(WKWebView *)w didFinishNavigation:(WKNavigation *)nav {
-  if (!getenv("BAXIAN_DEBUG")) return;
+  if (!getenv("GAME_DEBUG")) return;
   NSString *js = @"(function(){ var old = localStorage.getItem('probe'); localStorage.setItem('probe', String(Date.now()));"
                   "return [document.title, typeof MapScene, typeof QUESTS, Object.keys(QUESTS).length, 'probe=' + old].join(' | '); })()";
-  [w evaluateJavaScript:js completionHandler:^(id r, NSError *e) { printf("BAXIAN_DEBUG %s\n", [[r description] ?: e.description UTF8String]); fflush(stdout); }];
+  [w evaluateJavaScript:js completionHandler:^(id r, NSError *e) { printf("GAME_DEBUG %s\n", [[r description] ?: e.description UTF8String]); fflush(stdout); }];
 }
 - (BOOL)applicationShouldTerminateAfterLastWindowClosed:(NSApplication *)a { return YES; }
 @end

@@ -11,6 +11,8 @@ rm -rf "$APP" "dist/${NAME}-mac.zip"
 mkdir -p "$APP/Contents/MacOS" "$APP/Contents/Resources/web"
 clang -arch x86_64 -arch arm64 -mmacosx-version-min=10.13 -fobjc-arc -O2 -framework Cocoa -framework WebKit mac/main.m -o "$APP/Contents/MacOS/Game"
 cp "dist/${NAME}.html" "$APP/Contents/Resources/web/game.html"
+[ -f "mac/$SID.icns" ] || python3 -I tools/make_icon.py "$SID"   # 图标：主角站在黄昏的沙丘上
+cp "mac/$SID.icns" "$APP/Contents/Resources/AppIcon.icns"
 VERSION="$(git rev-list --count HEAD 2>/dev/null || echo 1)"
 cat > "$APP/Contents/Info.plist" <<PL
 <?xml version="1.0" encoding="UTF-8"?>
@@ -20,6 +22,7 @@ cat > "$APP/Contents/Info.plist" <<PL
   <key>CFBundleDisplayName</key><string>${NAME}</string>
   <key>CFBundleIdentifier</key><string>local.historyrpg.$SID</string>
   <key>CFBundleExecutable</key><string>Game</string>
+  <key>CFBundleIconFile</key><string>AppIcon</string>
   <key>CFBundlePackageType</key><string>APPL</string>
   <key>CFBundleShortVersionString</key><string>1.0.$VERSION</string>
   <key>CFBundleVersion</key><string>$VERSION</string>

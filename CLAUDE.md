@@ -15,6 +15,7 @@
 node tools/playtest.js zhangqian    # 无头试玩：全部卡、任务、路线
 node tools/engine-check.js          # 引擎独立性
 python3 build.py zhangqian          # 打包 dist/<标题>.html
+mac/build_mac.sh zhangqian          # 分发版：dist/<标题>.app 和 dist/<标题>-mac.zip（App + 使用说明 + 浏览器版）
 ```
 
 ## 做事走 skill
