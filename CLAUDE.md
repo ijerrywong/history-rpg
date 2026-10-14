@@ -21,4 +21,4 @@ python3 build.py zhangqian          # 打包 dist/<标题>.html
 - 新题材、补章节 → `new-history-game`（会派子代理 `history-fact-checker` 查史实）
 - 配图 → `card-images`；拼音 → `pinyin-pass`；新建筑/地标造型 → `scene-art`
 
-《张骞传》已发布的 Artifact：https://claude.ai/artifact/8dMHsc9wQXNXqNUuN4wwoB（index.html + js/ 多文件版；以后可以改发 dist 单文件）
+《张骞传》（五章完整版）已发布的 Artifact：https://claude.ai/artifact/8dMHsc9wQXNXqNUuN4wwoB（发 index.html + files；更新时用同一个 file_path）

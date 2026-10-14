@@ -78,7 +78,7 @@ python3 build.py <id> && python3 -m http.server 8765 --bind 127.0.0.1
 ```bash
 python3 build.py <id>            # → dist/<标题>.html，单文件，图片已内嵌
 ```
-问用户要不要发布，确认后用 Artifact 发布 `dist/<标题>.html`。最后交给用户：链接、这一版有几章几张卡、哪些是虚构情节、还存疑的读音或史实。
+问用户要不要发布。确认后用 Artifact 发布 `index.html`，把改过的 `js/` 文件和新图片放进 `files` 一起发（dist 单文件自带完整的 html 外壳，Artifact 还会再套一层，不要直接发它）。更新已有的游戏用同一个 file_path，链接不变。最后交给用户：链接、这一版有几章几张卡、哪些是虚构情节、还存疑的读音或史实。
 
 ## 交付物清单
 - `js/story/<id>.js`、`tests/<id>.test.js`、`docs/<id>/facts.md`、`docs/<id>/outline.md`

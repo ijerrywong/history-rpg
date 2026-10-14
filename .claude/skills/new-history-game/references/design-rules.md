@@ -30,5 +30,6 @@
 - 引擎（js/engine/）里不许写任何题材专属的名字；题材内容只写在 js/story/<id>.js。
 
 ## 发布
-- `python3 build.py <id>` 生成 dist/<标题>.html（单文件，图片已内嵌），用 Artifact 发布这个文件。
+- `python3 build.py <id>` 生成 dist/<标题>.html（单文件，图片已内嵌），用来离线双击玩。
+- 发布 Artifact 时发 index.html，改过的 js 和图片放进 files 一起发（单文件版自带 html 外壳，不直接发）。
 - 同一个剧本以后再发布，用同一个文件路径更新，保持链接不变。

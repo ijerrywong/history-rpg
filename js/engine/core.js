@@ -98,13 +98,17 @@ function drawRuby(s, x, y, o) {
   const marks = rubyOf(s); if (!marks.length) return;
   const size = o.size || 20, ps = Math.max(10, Math.round(size * 0.55));
   const tw = ctx.measureText(s).width, x0 = o.align === 'center' ? x - tw / 2 : o.align === 'right' ? x - tw : x;
-  const pos = marks.map(([i, n, py]) => [x0 + ctx.measureText(s.slice(0, i)).width, ctx.measureText(s.slice(i, i + n)).width, py]);
+  // 首尾相连的两个注音词（如「大宛列传」），拼音都只许占自己那几个字的宽度
+  const sorted = marks.slice().sort((a, b) => a[0] - b[0]);
+  const tight = sorted.map((m, k) => (k > 0 && sorted[k - 1][0] + sorted[k - 1][1] === m[0]) || (k < sorted.length - 1 && m[0] + m[1] === sorted[k + 1][0]));
+  const pos = sorted.map(([i, n, py], k) => [x0 + ctx.measureText(s.slice(0, i)).width, ctx.measureText(s.slice(i, i + n)).width, py, tight[k]]);
   const font = ctx.font, base = ctx.textBaseline, al = ctx.textAlign;
   ctx.textAlign = 'center'; ctx.textBaseline = 'bottom';
-  for (const [ox, ww, py] of pos) {
+  for (const [ox, ww, py, isTight] of pos) {
     let f = ps; ctx.font = `${f}px ${FONT}`;
-    while (f > 8 && ctx.measureText(py).width > ww * 1.35) ctx.font = `${--f}px ${FONT}`;
-    const cx = ox + ww / 2, by = y + (o.rubyGap ?? 0);
+    const cx = ox + ww / 2, lim = isTight ? ww - 2 : ww * 1.35;
+    while (f > 7 && ctx.measureText(py).width > lim) ctx.font = `${--f}px ${FONT}`;
+    const by = y + (o.rubyGap ?? 0);
     if (o.rubyBg) { const pw = ctx.measureText(py).width; ctx.fillStyle = o.rubyBg; ctx.fillRect(cx - pw / 2 - 4, by - f - 3, pw + 8, f + 4); }
     if (o.shadow !== false) { ctx.fillStyle = 'rgba(0,0,0,0.75)'; ctx.fillText(py, cx + 1, by + 1); }
     ctx.fillStyle = o.rubyColor || o.color || '#f4ecd8'; ctx.fillText(py, cx, by);

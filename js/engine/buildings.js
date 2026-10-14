@@ -51,6 +51,60 @@ function yurtBody(x, cx, rw, col, o = {}) {
   if (o.patches) for (const [X, Y] of o.patches) prect(x, cx + X, base - wall + Y, 5, 4, shadeHex(col, -0.28));
 }
 
+// —— 干旱地区的小件：土坯、平顶、骆驼、篷车、葡萄架 ——
+// 土坯墙：一块块土坯砖，错缝砌
+function mudbrick(x, X, Y, w, h, col = '#c8a070') {
+  prect(x, X, Y, w, h, col);
+  const d = shadeHex(col, -0.15);
+  for (let y = Y + 4, r = 0; y < Y + h; y += 4, r++) { prect(x, X, y, w, 1, d); for (let k = X + (r % 2 ? 4 : 0); k < X + w; k += 8) prect(x, k, y - 3, 1, 3, d); }
+  prect(x, X, Y, w, 1, shadeHex(col, 0.15));
+}
+// 平顶：女儿墙 + 伸出墙外的木梁头
+function flatRoof(x, X, Y, w, col = '#a88058') {
+  prect(x, X - 1, Y, w + 2, 3, col); prect(x, X - 1, Y, w + 2, 1, shadeHex(col, 0.2));
+  for (let k = X + 3; k < X + w - 2; k += 6) prect(x, k, Y + 3, 2, 2, '#5a3a20');
+}
+// 高大修长的马（朝左，约 20×18）
+function tallHorse(x, X, Y, col = '#d8a048') {
+  const d = shadeHex(col, -0.3);
+  pell(x, X + 12, Y + 8, 7, 3.5, col);
+  ppoly(x, [[X + 6, Y + 7], [X + 3, Y], [X + 6, Y - 1], [X + 9, Y + 6]], col);
+  prect(x, X, Y - 1, 5, 3, col); px(x, X + 1, Y, '#1a1010');
+  ppoly(x, [[X + 4, Y - 2], [X + 7, Y - 1], [X + 9, Y + 5], [X + 7, Y + 5]], '#3a2010');
+  for (const L of [X + 7, X + 9, X + 15, X + 17]) prect(x, L, Y + 10, 1, 7, d);
+  pline(x, X + 19, Y + 7, X + 21, Y + 13, '#3a2010');
+}
+// 双峰骆驼（朝左，约 22×18）
+function camel(x, X, Y, col = '#b88a50') {
+  const d = shadeHex(col, -0.28);
+  pell(x, X + 12, Y + 9, 8, 3.5, col);
+  pell(x, X + 9, Y + 5, 3, 3, col); pell(x, X + 15, Y + 5, 3, 3, col);
+  ppoly(x, [[X + 5, Y + 9], [X + 2, Y + 3], [X + 4, Y + 2], [X + 7, Y + 8]], col);
+  prect(x, X - 1, Y + 1, 5, 3, col); px(x, X, Y + 2, '#1a1010');
+  for (const L of [X + 6, X + 8, X + 16, X + 18]) prect(x, L, Y + 12, 1, 6, d);
+  pline(x, X + 20, Y + 8, X + 21, Y + 12, d);
+}
+// 带篷的大车（约 16×12）
+function cart(x, X, Y) {
+  pell(x, X + 8, Y + 4, 8, 5, '#d8cdb0'); prect(x, X, Y + 4, 16, 1, '#a89878');
+  for (let k = X + 3; k < X + 15; k += 4) pline(x, k, Y + 1, k, Y + 4, '#a89878');
+  prect(x, X, Y + 5, 16, 4, '#7a5230'); prect(x, X, Y + 5, 16, 1, '#9a7048');
+  for (const W of [X + 3, X + 13]) { pdisc(x, W, Y + 10, 2.5, '#4a3020'); px(x, W, Y + 10, '#c8a070'); }
+  pline(x, X - 4, Y + 8, X, Y + 7, '#6a4424');
+}
+// 葡萄架：立柱、横梁、藤叶和一串串紫葡萄
+function vines(x, X, Y, w, h) {
+  for (let k = X; k <= X + w; k += 12) prect(x, k, Y, 2, h, '#6a4424');
+  prect(x, X, Y, w + 2, 2, '#7a5230');
+  for (let k = X - 1; k < X + w + 2; k += 3) pell(x, k, Y + 1, 2.5, 2, (k / 3) % 2 ? '#3a8a3a' : '#4a9a4a');
+  for (let k = X + 3; k < X + w; k += 6) { pell(x, k, Y + 5, 1.5, 2.5, '#6a2a8a'); px(x, k, Y + 4, '#9a5ac8'); }
+}
+// 大酒瓮
+function jar(x, X, Y, h = 12, col = '#a8683a') {
+  pell(x, X, Y + h * 0.55, h * 0.4, h * 0.45, col); pell(x, X - 1, Y + h * 0.45, h * 0.15, h * 0.25, shadeHex(col, 0.2));
+  prect(x, X - 2, Y, 4, 3, shadeHex(col, -0.2)); prect(x, X - 3, Y, 6, 1, shadeHex(col, -0.35));
+}
+
 const BUILDINGS = {
   // 宫殿：高高的夯土台基、正中的长台阶、红柱、两层屋檐、屋脊两头的鸱尾
   palace: { top: 26, label: 11, draw(x, o) {
@@ -174,6 +228,68 @@ const BUILDINGS = {
     pell(x, 40, 3, 4, 2, '#e0b040'); ppoly(x, [[32, -1], [40, -6], [48, -1], [40, -3]], '#f0c040'); prect(x, 39, -9, 3, 3, '#3ab0a0'); px(x, 41, -8, '#1a1a1a');
     for (const X of [2, 77]) { prect(x, X, -20, 2, 68, '#3a2a18'); ppoly(x, [[X - 3, -14], [X + 1, -22], [X + 5, -14]], '#e0b040'); for (let k = 0; k < 5; k++) pline(x, X + 1, -12, X - 2 + k * 1.5, -2, k % 2 ? '#1a1a1a' : '#e8e0d0'); }
   }, fx(c, X, Y, t) { for (const [px0, dir] of [[3, 1], [78, -1]]) waveFlag(c, X + px0 * 3, Y - 10 * 3, 24 * dir, 12, '#c8302a', t, px0); } },
+  // 土坯王宫：厚墙平顶、两座带垛口的望楼、门上木过梁、门前两面旗
+  mudpalace: { top: 24, label: 10, draw(x) {
+    mudbrick(x, 14, 4, 52, 44, '#c89868'); for (let X = 14; X < 66; X += 6) prect(x, X, 0, 4, 4, '#c89868');
+    prect(x, 14, 16, 52, 2, '#a83a2a'); for (let X = 16; X < 64; X += 6) px(x, X, 15, '#e0b040');
+    for (const T of [2, 64]) { mudbrick(x, T, -16, 14, 64, '#b88858'); for (let X = T; X < T + 14; X += 5) prect(x, X, -20, 3, 4, '#b88858'); prect(x, T + 6, -8, 2, 5, '#2a1a10'); prect(x, T + 6, 6, 2, 5, '#2a1a10'); }
+    for (const X of [22, 56]) prect(x, X, 22, 3, 5, '#2a1a10');
+    prect(x, 31, 27, 18, 21, '#3a2418'); prect(x, 30, 25, 20, 3, '#6a4424'); door(x, 40, 29, 14, 19, '#7a4a20');
+    for (const X of [8, 70]) { flagPole(x, X, -30, 12); prect(x, X + 1, -29, 6, 4, '#2a6a8a'); prect(x, X + 1, -26, 6, 1, '#e0b040'); }
+  } },
+  // 葡萄酒坊：门前葡萄架挂满紫葡萄，墙边一排大酒瓮，后面是平顶屋
+  winery: { top: 8, label: 12, draw(x) {
+    mudbrick(x, 20, 10, 46, 38, '#d0a878'); flatRoof(x, 20, 7, 46);
+    prect(x, 26, 20, 4, 4, '#2a1a10'); prect(x, 56, 20, 4, 4, '#2a1a10');
+    door(x, 40, 30, 12, 18, '#7a4a20');
+    vines(x, 0, 14, 26, 34);
+    for (const [X, h] of [[58, 14], [66, 12], [74, 14], [62, 10]]) jar(x, X, 48 - h, h);
+  } },
+  // 马场：木栅栏围起来，里面是高大修长的骏马，后面有马棚，旁边一个水槽
+  horsefarm: { top: 12, label: 14, draw(x) {
+    prect(x, 52, 8, 28, 3, '#7a5a3a'); ppoly(x, [[50, 11], [80, 4], [80, 11]], '#9a7048'); for (const X of [53, 66, 78]) prect(x, X, 11, 2, 18, '#5a3a20');
+    prect(x, 52, 11, 28, 18, 'rgba(60,40,20,0.35)');
+    tallHorse(x, 8, 18, '#d8a048'); tallHorse(x, 50, 20, '#6a3a20'); tallHorse(x, 26, 10, '#e8c890');
+    for (let X = 0; X < 80; X += 8) { if (X >= 32 && X < 48) continue; prect(x, X, 30, 2, 18, '#7a5230'); }
+    for (const Y of [32, 40]) { prect(x, 0, Y, 32, 2, '#9a7048'); prect(x, 48, Y, 32, 2, '#9a7048'); }
+    prect(x, 4, 42, 16, 5, '#6a4424'); prect(x, 5, 42, 14, 2, '#4a7ab8');
+  } },
+  // 平顶民居：土坯墙、平顶伸出木梁头，屋顶晒着杏干，墙边靠着梯子
+  flathouse: { top: 6, label: 10, draw(x) {
+    mudbrick(x, 8, 12, 64, 36, '#c8a070'); flatRoof(x, 8, 9, 64);
+    prect(x, 16, 6, 18, 3, '#d8b060'); for (let k = 0; k < 7; k++) px(x, 17 + k * 2.5, 7, '#e88a30');
+    prect(x, 16, 22, 5, 5, '#2a1a10'); prect(x, 59, 22, 5, 5, '#2a1a10'); prect(x, 16, 22, 5, 1, '#6a4424'); prect(x, 59, 22, 5, 1, '#6a4424');
+    door(x, 40, 30, 12, 18, '#6a4424');
+    for (const X of [72, 77]) pline(x, X, 48, X + 2, 6, '#6a4424'); for (let y = 10; y < 46; y += 5) pline(x, 72 + (48 - y) / 21, y, 77 + (48 - y) / 21, y, '#8a6038');
+  } },
+  // 大市场：后面一排平顶房，前面彩色布棚摊位（布匹、竹杖、瓜、陶器），中间是市门
+  bazaar: { top: 12, label: 8, draw(x) {
+    mudbrick(x, 0, 4, 80, 20, '#c8a070'); flatRoof(x, 0, 1, 80);
+    const stall = (X, w, cols, goods) => {
+      for (const P of [X, X + w - 2]) prect(x, P, 16, 2, 32, '#6a4424');
+      for (let k = 0; k < w; k += 4) { const c = cols[(k / 4) % cols.length]; prect(x, X + k, 14, 4, 5, c); pell(x, X + k + 2, 19, 2, 1.5, c); }
+      prect(x, X, 38, w, 3, '#8a5a30'); prect(x, X, 41, w, 7, '#6a4424');
+      goods(X + 2, 28);
+    };
+    stall(0, 30, ['#e8a020', '#3a4aa8', '#c83a2a'], (X, Y) => {
+      for (const [k, c] of [[0, '#c83a2a'], [5, '#e8c040'], [10, '#3a6ac8']]) { prect(x, X + k, Y + 4, 4, 6, c); prect(x, X + k, Y + 4, 4, 1, shadeHex(c, 0.3)); }
+      for (let k = 0; k < 5; k++) { prect(x, X + 16 + k * 2, Y - 2, 1, 12, k % 2 ? '#a8a040' : '#c8b850'); px(x, X + 16 + k * 2, Y + 1, '#6a6a20'); }
+    });
+    stall(50, 30, ['#3a8a5a', '#e8a020', '#a83a8a'], (X, Y) => {
+      for (const k of [0, 7]) { pell(x, X + k + 3, Y + 7, 3.5, 2.5, '#5a9a3a'); pline(x, X + k + 1, Y + 6, X + k + 5, Y + 6, '#3a6a2a'); }
+      for (const [k, h] of [[15, 8], [21, 6]]) jar(x, X + k, Y + 10 - h, h, '#b8784a');
+    });
+    for (const P of [32, 46]) prect(x, P, 14, 2, 34, '#7a4a20'); prect(x, 30, 12, 20, 3, '#8a5a30');
+    prect(x, 34, 15, 12, 6, '#2a6a8a'); prect(x, 34, 15, 12, 1, '#e0b040');
+  } },
+  // 客舍：平顶院子，院门敞开，门口拴着一峰双峰骆驼
+  courtyard_inn: { top: 6, label: 10, draw(x) {
+    mudbrick(x, 6, 4, 68, 18, '#c8a070'); flatRoof(x, 6, 1, 68); for (const X of [16, 30, 48, 62]) prect(x, X, 10, 4, 4, '#2a1a10');
+    mudbrick(x, 0, 24, 80, 24, '#d0a878'); prect(x, 0, 22, 80, 2, '#a88058');
+    prect(x, 32, 28, 16, 20, '#3a2418'); prect(x, 32, 28, 3, 20, '#8a5a30'); prect(x, 45, 28, 3, 20, '#8a5a30'); prect(x, 31, 26, 18, 2, '#6a4424');
+    prect(x, 36, 36, 8, 12, '#b89060');
+    camel(x, 54, 28, '#7a5228'); prect(x, 78, 34, 2, 14, '#5a3a20'); pline(x, 56, 31, 78, 35, '#8a6a40');
+  } },
   // 旧的通用造型（瓦顶房子），没写 art 时用它
   hall: { top: 0, label: 17, draw(x, o) { x.drawImage(Gfx.building(5, o.roof || '#3a5a8a', o.wall), 0, 0, 80, 48); } },
 };
@@ -258,6 +374,48 @@ const LANDMARKS = {
     for (let k = 0; k < 9; k++) pell(x, 1 + k * 2, 10 + (k % 3), 2, 2, '#4a9a3a');
     for (const [X, Y] of [[3, 13], [8, 14], [13, 13], [16, 15]]) { pell(x, X, Y, 1.5, 2, '#7a3a9a'); px(x, X, Y - 1, '#a060c0'); }
     horse(x, 2, 20, '#c88a3a');
+  } },
+  // 篷车游牧营地：低矮的毡帐，几辆带篷的大车，牛羊散在草地上
+  wagoncamp: { w: 3, h: 2, top: 8, draw(x) {
+    yurtMini(x, 12, 14, 6, '#d0c4a8', { band: '#7a3a2a' }); yurtMini(x, 36, 12, 5, '#c8bca0', { band: '#7a3a2a' });
+    cart(x, 2, 18); cart(x, 30, 20);
+    flagPole(x, 24, -6, 20); for (let k = 0; k < 3; k++) pline(x, 24, -4, 22 + k * 2, 4, k % 2 ? '#7a3a2a' : '#e8e0d0');
+    for (const [X, Y] of [[18, 26], [22, 28], [40, 30]]) { prect(x, X, Y, 4, 2, '#7a4a2a'); prect(x, X - 1, Y - 1, 2, 2, '#7a4a2a'); px(x, X, Y + 2, '#4a2a1a'); px(x, X + 3, Y + 2, '#4a2a1a'); }
+    for (const [X, Y] of [[4, 29], [8, 30], [44, 25]]) { prect(x, X, Y, 3, 2, '#f4f0e8'); px(x, X + 3, Y, '#3a3030'); }
+  } },
+  // 王庭：一圈蓝边帐篷，中间插旗的大帐，帐前马群（放在地图的大河边，河由地图本身画）
+  rivercourt: { w: 3, h: 2, top: 12, draw(x) {
+    yurtMini(x, 8, 18, 6, '#e0d4b8', { band: '#2a4a8a' }); yurtMini(x, 40, 18, 6, '#e0d4b8', { band: '#2a4a8a' });
+    yurtMini(x, 24, 20, 10, '#f0e8d0', { band: '#2a4a8a' }); prect(x, 21, 0, 6, 2, '#e0b040');
+    flagPole(x, 24, -10, 14); prect(x, 25, -9, 7, 4, '#2a4a8a'); prect(x, 25, -6, 7, 1, '#e0b040');
+    for (const [X, Y, c] of [[2, 26, '#6a4a30'], [37, 27, '#d8a048'], [43, 25, '#3a2a1a']]) { prect(x, X, Y, 5, 2, c); prect(x, X - 1, Y - 2, 2, 3, c); px(x, X, Y + 2, c); px(x, X + 4, Y + 2, c); }
+    yurtMini(x, 8, 31, 5, '#d8ccb0', { band: '#2a4a8a' }); yurtMini(x, 40, 31, 5, '#d8ccb0', { band: '#2a4a8a' });
+  } },
+  // 商城：土坯城墙、四角方塔，墙里露出平顶房和彩色遮阳棚
+  bazaarcity: { w: 3, h: 2, top: 16, draw(x) {
+    for (const [X, Y, w, h] of [[6, -6, 10, 14], [18, -12, 12, 20], [32, -4, 10, 12]]) { prect(x, X, Y, w, h, '#d0a878'); prect(x, X, Y, w, 2, '#a88058'); prect(x, X + 2, Y + 4, 2, 3, '#2a1a10'); }
+    for (const [X, c1, c2] of [[8, '#e8a020', '#3a4aa8'], [30, '#c83a2a', '#e8e0d0']]) for (let k = 0; k < 10; k += 2) prect(x, X + k, 6, 2, 4, (k / 2) % 2 ? c1 : c2);
+    mudbrick(x, 0, 12, 48, 20, '#c8a070'); for (let X = 0; X < 48; X += 4) prect(x, X, 10, 2, 2, '#c8a070');
+    for (const T of [0, 40]) { mudbrick(x, T, 4, 8, 28, '#b88858'); for (const X of [T, T + 3, T + 6]) prect(x, X, 2, 2, 2, '#b88858'); }
+    prect(x, 19, 22, 10, 10, '#2a1a10'); prect(x, 18, 20, 12, 2, '#6a4424');
+  } },
+  // 山间牧人营地：雪山下的坡地，几顶深色帐篷，一群羊
+  hillcamp: { w: 3, h: 2, top: 18, draw(x) {
+    ppoly(x, [[-2, 20], [14, -16], [30, 20]], '#8aa0bc'); ppoly(x, [[18, 20], [34, -12], [50, 20]], '#7a90ac');
+    ppoly(x, [[9, -6], [14, -16], [19, -6], [16, -8], [14, -5], [12, -8]], '#ffffff'); ppoly(x, [[30, -3], [34, -12], [38, -3], [35, -5], [33, -2]], '#ffffff');
+    pell(x, 24, 30, 30, 12, '#8aa060');
+    yurtMini(x, 12, 24, 5, '#5a4a3a', { band: '#3a2a1a' }); yurtMini(x, 34, 22, 5, '#6a5040', { band: '#3a2a1a' });
+    for (const [X, Y] of [[20, 26], [24, 28], [28, 25], [22, 30], [40, 29]]) { prect(x, X, Y, 3, 2, '#f4f0e8'); px(x, X + 3, Y, '#3a3030'); }
+  }, fx(c, X, Y, t) { smoke(c, X + 12 * 3, Y + 16 * 3, t, 0.25); } },
+  // 野外营火：一堆柴、火苗，架子上烤着肉
+  campfire: { w: 1, h: 1, top: 4, draw(x) {
+    for (const [a, b] of [[[3, 14], [13, 10]], [[3, 10], [13, 14]]]) pline(x, a[0], a[1], b[0], b[1], '#6a4424', 2);
+    prect(x, 2, -2, 1, 14, '#5a3a20'); prect(x, 13, -2, 1, 14, '#5a3a20'); prect(x, 2, -2, 12, 1, '#5a3a20'); pell(x, 8, 0, 3, 1.5, '#a8502a');
+  }, fx(c, X, Y, t) {
+    const f = Math.floor(t / 120) % 3;
+    c.fillStyle = '#f08020'; c.fillRect(X + 15, Y + 18 - f * 3, 18, 18 + f * 3);
+    c.fillStyle = '#ffd040'; c.fillRect(X + 19, Y + 24 - f * 2, 10, 12 + f * 2);
+    smoke(c, X + 24, Y + 6, t, 0.3);
   } },
   // 汉朝的关：南北走向的夯土关墙，正中关城门楼（朝西的一面有垛口）
   hanpass: { w: 4, h: 4, top: 6, draw(x, o) {

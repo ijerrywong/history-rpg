@@ -5,7 +5,8 @@
 2. 列出剧本台词里用到、但还没被任何拼音词覆盖的字（按出现次数排序，附一处上下文），
    用来挑生僻字、多音字、人名地名
 """
-import re, sys
+import re, signal, sys
+signal.signal(signal.SIGPIPE, signal.SIG_DFL)  # 接 head 时不报错
 from collections import Counter
 
 p = sys.argv[1] if len(sys.argv) > 1 else 'js/story/zhangqian.js'

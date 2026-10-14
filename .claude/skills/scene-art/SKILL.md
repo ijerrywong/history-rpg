@@ -63,5 +63,8 @@ node tools/playtest.js <id>
 ```
 
 ## 现有造型（会越来越多，以 gallery 为准）
-- 城镇：palace 宫殿、market 市场、bookshop 书肆、barracks 兵营、house 民宅、station 驿站、office 官府、beacon 烽火台、yurt 毡帐、yurt_home 住人的毡帐、yurt_herd 带羊圈的毡帐、yurt_old 旧毡帐、yurt_royal 首领大帐、hall 通用瓦房
-- 地标：capital 都城、frontier 边城、camp 游牧营地、oasis 绿洲城、hanpass 汉式关城（关卡）、xnpost 草原哨卡（关卡）
+- 城镇（汉地）：palace 宫殿、market 市场、bookshop 书肆、barracks 兵营、house 民宅、station 驿站、office 官府、beacon 烽火台、hall 通用瓦房
+- 城镇（草原）：yurt 毡帐、yurt_home 住人的毡帐、yurt_herd 带羊圈的毡帐、yurt_old 旧毡帐、yurt_royal 首领大帐
+- 城镇（绿洲、中亚）：mudpalace 土坯王宫、winery 葡萄酒坊、horsefarm 马场、flathouse 平顶民居、bazaar 大市场、courtyard_inn 带骆驼的客舍
+- 地标：capital 都城、frontier 边城、camp 游牧营地、oasis 绿洲城、wagoncamp 篷车营地、rivercourt 王庭（放在地图的河边）、bazaarcity 商城、hillcamp 雪山牧人营地、campfire 营火（1 格）、hanpass 汉式关城（关卡）、xnpost 草原哨卡（关卡）
+- 共用小件另有：mudbrick 土坯墙、flatRoof 平顶、tallHorse 高头大马、camel 双峰驼、cart 篷车、vines 葡萄架、jar 大酒瓮

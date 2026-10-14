@@ -10,7 +10,7 @@ const GAME = {
   title: '张骞传',
   subtitle: '出使西域',
   tagline: '像素历史角色扮演 · 公元前138年',
-  chapters: ['序章 未央宫', '第一章 匈奴十年', '第二章 大宛与月氏'],
+  chapters: ['序章 未央宫', '第一章 匈奴十年', '第二章 大宛与月氏', '第三章 归途', '终章 凿空'],
   party: ['zhang'],
   titleSprites: ['zhangqian', 'ganfu', 'soldier', 'soldier'],
   titleSky: ['#0a0818', '#3a2438', '#8a4a30'],
@@ -40,16 +40,28 @@ const PINYIN = {
   '竹杖': 'zhú zhàng', '穗子': 'suì zi', '牲畜': 'shēng chù', '充饥': 'chōng jī',
   '捎': 'shāo', '仆人': 'pú rén', '居延': 'jū yán', '金冠': 'jīn guān',
   '哨卡': 'shào qiǎ', '列传': 'liè zhuàn', '少长': 'shào zhǎng', '将军': 'jiāng jūn',
-  '绿洲': 'lǜ zhōu', '气盛': 'qì shèng', '胆量': 'dǎn liàng', '陕西': 'shǎn xī',
+  '气盛': 'qì shèng', '胆量': 'dǎn liàng', '陕西': 'shǎn xī',
   '甘肃': 'gān sù', '丝绸': 'sī chóu', '羊羔': 'yáng gāo', '贩子': 'fàn zi',
-  '边疆': 'biān jiāng', '宁夏': 'níng xià', '遗址': 'yí zhǐ', '宗室': 'zōng shì',
+  '宁夏': 'níng xià', '遗址': 'yí zhǐ', '宗室': 'zōng shì',
   '咩': 'miē', '殿': 'diàn', '烽火台': 'fēng huǒ tái', '烽火': 'fēng huǒ',
+  // 第二章到终章（2026-10-13 pinyin-pass；并南山依《史记正义》「並，白浪反」）
+  '康居': 'kāng jū', '大夏': 'dà xià', '安息': 'ān xī', '身毒': 'yuān dú',
+  '蓝市': 'lán shì', '妫水': 'guī shuǐ', '阿姆河': 'ā mǔ hé', '阿富汗': 'ā fù hàn',
+  '羌': 'qiāng', '邛竹杖': 'qióng zhú zhàng', '蜀布': 'shǔ bù', '左谷蠡王': 'zuǒ lù lí wáng',
+  '伊稚斜': 'yī zhì xié', '军臣': 'jūn chén', '卫青': 'wèi qīng', '博望侯': 'bó wàng hóu',
+  '太中大夫': 'tài zhōng dà fū', '奉使君': 'fèng shǐ jūn', '司马迁': 'sī mǎ qiān', '李广利': 'lǐ guǎng lì',
+  '李希霍芬': 'lǐ xī huò fēn', '李特尔': 'lǐ tè ěr', '并南山': 'bàng nán shān', '万多石': 'wàn duō dàn',
+  '汗血马': 'hàn xuè mǎ', '血汗': 'xuè hàn', '凿空': 'záo kōng', '给食': 'jǐ shí',
+  '若欲何之': 'ruò yù hé zhī', '殊无': 'shū wú', '禽兽': 'qín shòu', '鸟兽': 'niǎo shòu',
+  '蒲陶': 'pú táo', '苜蓿': 'mù xu', '酿酒': 'niàng jiǔ', '地窖': 'dì jiào',
+  '皮袍': 'pí páo', '要领': 'yào lǐng', '嗖': 'sōu', '阿爸': 'ā bà',
 };
 
 // ===== 人物 =====
 const CHARS = {
   zhang: { name: '张骞', title: '汉朝的郎官，出使月氏的使者', sp: () => hasItem('jie') ? 'zhangqian' : 'zhangqian0' },
   gan: { name: '甘父', title: '匈奴人，堂邑家的仆人，神射手', sp: 'ganfu' },
+  huqi: { name: '胡妻', title: '张骞在匈奴娶的妻子，史书没记下她的名字', sp: 'huqi' },
 };
 Object.assign(SPRITES, {
   zhangqian0: { h: '#1a1a1a', r: '#7a2a2a', R: '#5a1a1a', t: '#d8c090', x: '#1a1a1a', b: '#1a1a1a', f: ['cap', 'beard'] },
@@ -63,10 +75,19 @@ Object.assign(SPRITES, {
   xnchild: { h: '#1a1a1a', s: '#d8a070', r: '#8a6a40', R: '#6a4a28', t: '#c03030', x: '#7a5a3a', f: ['furhat'], small: true },
   huqi: { h: '#1a1a1a', s: '#d8a070', r: '#c86a4a', R: '#9a4a2a', t: '#f0d080', f: ['topknot', 'skirt'] },
   son: { h: '#1a1a1a', s: '#e0b080', r: '#a0522d', R: '#7a3a1a', t: '#f0d080', f: ['tufts'], small: true },
+  dywang: { h: '#2a1a10', s: '#d8a070', r: '#2a6a8a', R: '#1a4a6a', t: '#f0c040', y: '#f0c040', b: '#2a1a10', f: ['crown', 'beard'] },
+  dyman: { h: '#2a1a10', s: '#d8a070', r: '#c8a060', R: '#9a7a40', t: '#6a3a2a', x: '#e8e0d0', f: ['cap', 'beard'] },
+  dywoman: { h: '#2a1a10', s: '#d8a070', r: '#a83a5a', R: '#7a2a40', t: '#f0d080', f: ['topknot', 'skirt'] },
+  dychild: { h: '#2a1a10', s: '#d8a070', r: '#6a9a4a', R: '#4a7a2a', t: '#c03030', f: ['tufts'], small: true },
+  kjman: { h: '#2a1a10', s: '#c89060', r: '#7a3a2a', R: '#5a2a1a', t: '#e8c060', x: '#3a2a1a', b: '#2a1a10', f: ['furhat', 'beard'] },
+  yzman: { h: '#1a1a1a', s: '#d0a070', r: '#4a5a8a', R: '#2a3a6a', t: '#e0b040', x: '#e8e0d0', b: '#1a1a1a', f: ['furhat', 'longbeard'] },
+  dxman: { h: '#2a1a10', s: '#d8a070', r: '#e0d0a0', R: '#b8a070', t: '#3a6a8a', x: '#3a6a8a', b: '#2a1a10', f: ['cap', 'beard', 'belly'] },
 });
-const SPEAK = { '张骞': 'zhangqian', '汉武帝': 'wudi', '单于': 'chanyu', '胡妻': 'huqi' };
+const SPEAK = { '张骞': 'zhangqian', '汉武帝': 'wudi', '单于': 'chanyu', '胡妻': 'huqi', '大宛王': 'dywang', '康居人': 'kjman', '月氏大臣': 'yzman' };
 
 // 走失的小羊（任务物品在地图上的样子）
+// 一捆苜蓿（开紫花的牧草）
+LOCICON.musu = x => { for (let k = 0; k < 6; k++) pline(x, 5 + k, 14, 3 + k * 2, 4 + (k % 2) * 2, '#3a8a3a'); prect(x, 4, 10, 9, 2, '#c8a050'); for (const [X, Y] of [[3, 4], [7, 3], [11, 5], [9, 6]]) { px(x, X, Y, '#9a5ac8'); px(x, X + 1, Y, '#b07ad8'); } };
 LOCICON.lamb = x => { pell(x, 8, 10, 5, 4, '#f4f0e8'); pell(x, 7, 9, 4, 3, '#ffffff'); pell(x, 13, 8, 2, 2, '#e8dcc8'); px(x, 13, 7, '#1a1a1a'); for (const X of [5, 7, 9, 11]) prect(x, X, 13, 1, 3, '#5a4a3a'); };
 
 // 草原的曲子（五声音阶）
@@ -79,6 +100,7 @@ const ITEMS = {
   jie: { name: '汉节', type: 'key', desc: '使者的信物：一根竹杖，挂着牦牛尾做的穗子。见节如见皇帝。' },
   q_letter: { name: '家书', type: 'quest', desc: '长安老妇人写给儿子的信，儿子在陇西当戍卒。' },
   q_lamb: { name: '小羊羔', type: 'quest', desc: '匈奴小孩走失的小羊，咩咩直叫。' },
+  q_musu: { name: '苜蓿', type: 'quest', desc: '一捆开紫花的苜蓿草，大宛的马最爱吃。' },
 };
 
 // ===== 史料卡 =====
@@ -133,6 +155,58 @@ const CARDS = {
     text: '史书没有写张骞怎样学匈奴话。但他在草原住了十多年，后来又和西域各国打交道，很可能会说当地的话。游戏里跟小孩学说话的情节是想象的。' },
   escape: { ch: 1, fact: true, title: '向西逃走', src: '《史记·大宛列传》',
     text: '时间久了，匈奴对张骞看管得越来越松。张骞抓住机会，带着手下逃走，向西走了几十天，到达了大宛。' },
+  // —— 第二章 ——
+  dywang: { ch: 2, fact: true, title: '大宛王很高兴', src: '《史记·大宛列传》',
+    text: '大宛早就听说汉朝很富有，想和汉朝来往，可一直找不到路。张骞来了，大宛王很高兴，问他：「你要去哪儿？」史书里的原话是「若欲何之？」' },
+  chengnuo: { ch: 2, fact: true, title: '张骞的承诺', src: '《史记·大宛列传》',
+    text: '张骞说：「请大王派人送我去月氏。我回到汉朝以后，汉朝送给大王的财物多得说不完。」大宛王觉得有道理，就派了向导和翻译。向导就是带路的人。' },
+  putaojiu: { ch: 2, fact: true, title: '葡萄酒能放几十年', src: '《史记·大宛列传》',
+    text: '大宛人用葡萄（古书写作「蒲陶」）酿酒，有钱人家藏的酒有一万多石，放几十年都不坏。大宛的马最爱吃一种草，叫苜蓿。',
+    img: { src: 'img/cards/putaojiu.jpg', cap: '今天的苜蓿花。大宛的马最爱吃它，后来汉使把种子带回了中原。', credit: 'Sten Porse · CC BY-SA 3.0 · Wikimedia Commons' } },
+  hanxue: { ch: 2, fact: true, title: '汗血马', src: '《史记·大宛列传》',
+    text: '大宛有很多好马。史书说这种马流的汗像血一样红，叫「汗血马」，还说它们是「天马」的后代。为什么会流「血汗」，史书没有解释。',
+    img: { src: 'img/cards/hanxue.jpg', cap: '东汉铜奔马（甘肃省博物馆）。这是汉代人心中的骏马，不是汗血马的写真，比张骞晚两百多年。', credit: 'Gary Todd · CC0 · Wikimedia Commons' } },
+  chuansong: { ch: 2, fact: true, title: '一站一站送过去', src: '《史记·大宛列传》',
+    text: '大宛派人把张骞送到康居，康居又把他送到大月氏。张骞是靠各国的人一站一站帮忙，才走到的。康居人也是赶着牛羊、四处搬家的游牧民族。' },
+  xinwang: { ch: 2, fact: true, title: '新王是谁？', src: '《史记》《汉书》',
+    text: '大月氏的老王被匈奴杀了，后来立了新王。《史记》说新王是太子，《汉书》说新王是王后。两本书说得不一样，到今天也说不准。' },
+  anle: { ch: 2, fact: true, title: '大月氏不想打仗了', src: '《史记·大宛列传》',
+    text: '大月氏搬到了新家，土地肥沃，没什么敌人，日子过得很安乐。他们觉得汉朝太远了，一点也不想再找匈奴报仇。',
+    img: { src: 'img/cards/anle.jpg', cap: '今天的阿姆河，古代叫妫水。大月氏的王庭就在这条河的北边。', credit: 'My cardio · CC BY-SA 4.0 · Wikimedia Commons' } },
+  lanshi: { ch: 2, fact: true, title: '大夏的大市场', src: '《史记·大宛列传》',
+    text: '大夏人住在城里，很会做生意。都城叫蓝市城，市场上什么东西都有卖。可是他们的军队很弱，怕打仗。大夏在今天的阿富汗北部一带。' },
+  qiongzhu: { ch: 2, fact: true, title: '四川的东西跑到了大夏', src: '《史记·大宛列传》',
+    text: '张骞在大夏的市场上，看见四川出产的邛竹杖和蜀布。大夏人说，是商人从身毒（就是古印度）买来的。张骞想：身毒离四川一定不远！' },
+  yinbi: { ch: 2, fact: true, title: '硬币上有国王的脸', src: '《史记·大宛列传》',
+    text: '张骞听说，西边的安息国用银子做钱，钱上印着国王的脸。国王死了，就换一种新钱。这是张骞听人说的，他没有亲自去过安息。',
+    img: { src: 'img/cards/yinbi.jpg', cap: '安息国王米特拉达梯二世的银币，和张骞是同一个时代。钱上印的就是国王的脸。', credit: 'Neilson C. Debevoise · 公有领域 · Wikimedia Commons' } },
+  yaoling: { ch: 2, fact: true, title: '没完成的任务', src: '《史记·大宛列传》',
+    text: '张骞在大夏住了一年多，始终没能说服大月氏一起打匈奴。史书说他「不能得月氏要领」。「要领」本来指衣服的腰和领，这里是说抓不住要点，事情没办成。' },
+  // —— 第三章 ——
+  nanshan: { ch: 3, fact: true, title: '换一条路回家', src: '《史记·大宛列传》',
+    text: '回家时，张骞想避开匈奴，沿着南边的大山走，从羌人住的地方回来。史书写的是「并南山，欲从羌中归」。没想到，又被匈奴抓住了。',
+    img: { src: 'img/cards/nanshan.jpg', cap: '今天的祁连山（在甘肃嘉峪关拍摄）。张骞回家时，就是沿着这样连绵的雪山走的。', credit: 'Emcc83 · CC BY-SA 3.0 · Wikimedia Commons' } },
+  sheshou: { ch: 3, fact: true, title: '会射箭的好伙伴', src: '《史记·大宛列传》',
+    text: '甘父（堂邑父）原本是胡人，射箭很准。最难的时候没东西吃，他就射鸟兽给大家吃。史书说他「穷急射禽兽给食」。',
+    img: { src: 'img/cards/sheshou.jpg', cap: '东汉的射猎画像砖（中国国家博物馆）。左上角的人正拉弓射天上的鸟。比张骞晚两百多年。', credit: 'Anagoria · CC BY-SA 4.0 · Wikimedia Commons' } },
+  luan: { ch: 3, fact: true, title: '趁乱逃走', src: '《史记》大宛列传、匈奴列传',
+    text: '张骞又被关了一年多。这时单于死了，单于的弟弟左谷蠡王打败太子，自己当了单于，匈奴乱成一团。张骞趁乱带着妻子和甘父逃回了汉朝。' },
+  // —— 终章 ——
+  erren: { ch: 4, fact: true, title: '一百多人去，两人回', src: '《史记·大宛列传》',
+    text: '出发时有一百多人。过了十三年，只有张骞和甘父两个人回到汉朝。一起逃回来的胡妻，不在原来那一百多人里。' },
+  jiangshang: { ch: 4, fact: true, title: '皇帝的奖赏', src: '《史记·大宛列传》',
+    text: '约公元前126年，张骞回到长安。汉武帝让张骞当「太中大夫」，让甘父当「奉使君」。这两个都是官名。' },
+  zaokong: { ch: 4, fact: true, title: '什么叫「凿空」', src: '《史记·大宛列传》及古注',
+    text: '司马迁在《史记》里说张骞「凿空」。凿就是打开，空就是孔、通道。意思是：通往西域本来没有路，张骞像凿开一个洞一样，第一个把路打通了。',
+    img: { src: 'img/cards/zaokong.jpg', cap: '今天陕西城固的张骞墓。2014 年，它和丝绸之路一起列入了世界遗产。', credit: 'hanming_huang · CC BY-SA 2.0 · Wikimedia Commons' } },
+  bowang: { ch: 4, fact: true, title: '博望侯', src: '《史记·大宛列传》',
+    text: '回国三年后，张骞跟着大将军卫青打匈奴。他知道哪里有水和草，军队不缺水草，立了功，被封为博望侯。「博望」常被解释成「看得广、望得远」。',
+    img: { src: 'img/cards/bowang.jpg', cap: '西汉霍去病墓前的「马踏匈奴」石雕。霍去病是和张骞同一个时代的将军。', credit: 'Hanming Huang · CC BY-SA 4.0 · Wikimedia Commons' } },
+  putao: { ch: 4, fact: true, title: '葡萄是谁带回来的？', src: '《史记·大宛列传》《汉书》',
+    text: '很多人以为葡萄是张骞带回来的。其实史书写的是：张骞以后的「汉使」把葡萄和苜蓿的种子带回来。汗血马更晚，是二十多年后打大宛才得到的。' },
+  sichou: { ch: 4, fact: true, title: '「丝绸之路」这个名字', src: '近代学者研究',
+    text: '汉朝人从来不说「丝绸之路」。这个名字是一千九百多年后的德国学者起的：1838 年李特尔已经用过，1877 年李希霍芬让它出了名。',
+    img: { src: 'img/cards/sichou.jpg', cap: '德国地理学家李希霍芬。是他让「丝绸之路」这个名字出了名。', credit: '佚名 · 公有领域 · Wikimedia Commons' } },
 };
 
 // ===== 章末小结 =====
@@ -145,33 +219,61 @@ const RECAPS = {
     game: ['一出边塞，你们就被匈奴骑兵抓住，押到了单于面前。', '你在草原住了下来，见识了穹庐、放牧和吃肉穿皮的生活，还娶了妻、有了孩子。', '十年过去，你一直带着汉节。趁看守松懈，你和甘父逃了出来，一路向西，到了大宛。'],
     history: ['张骞一行被匈奴扣留了十多年。单于让他娶妻生子，但他「持汉节不失」。', '后来看管渐松，张骞带着手下逃走，西行几十天到了大宛，又经过康居，到达大月氏。', '史书没写清他这次逃走时妻儿是否同行。几年后他回汉朝时，是带着匈奴妻子和甘父一起逃回来的。', '出发时一百多人，十三年后只有张骞和甘父两人回到长安。游戏里找小羊、学匈奴话等情节是想象的。'],
   },
+  2: {
+    game: ['大宛王很高兴，派向导和翻译送你们，经过康居，到了大月氏。', '大月氏过上了安乐的日子，不想再和匈奴打仗。', '你在大夏的市场上看到了四川的竹杖和布。住了一年多，还是没能完成使命。'],
+    history: ['张骞亲自到过大宛、康居、大月氏、大夏四个国家，这是史书明确写的。', '大月氏「志安乐」，「殊无报胡之心」；张骞「不能得月氏要领」，没有办成联合月氏的事。', '大月氏的新王是太子还是王后，《史记》和《汉书》说法不同。', '注意：大宛王只有「若欲何之？」一句是史书原话；马夫、酿酒人、找苜蓿是游戏想象的。'],
+  },
+  3: {
+    game: ['你们沿着南山回家，甘父射猎，让大家填饱了肚子。', '在羌中，你们又被匈奴抓住了。', '一年多后，单于死了，匈奴大乱。你带着妻子和甘父逃了出来。'],
+    history: ['张骞「并南山，欲从羌中归，复为匈奴所得」，又被扣留一年多。', '约公元前126年，军臣单于死，他的弟弟左谷蠡王伊稚斜攻打太子、自立为单于。张骞趁乱和胡妻、堂邑父逃回汉朝。', '史书没有写张骞的孩子后来怎样，所以游戏里不再出现孩子。', '打猎和逃走那一夜的经过，是游戏想象的。'],
+  },
+  4: {
+    game: ['你回到长安，见到了汉武帝。一百多人出发，只回来了两个人。', '后来，汉朝的使者一批接一批往西走，把西域的东西带回了中原。'],
+    history: ['张骞把亲自到过的四国，和听说的五六个大国，都报告给了汉武帝。', '司马迁说张骞「凿空」：他是第一个打通去西域道路的人。之后「使者相望于道」，路上的使者一个接一个。', '葡萄、苜蓿是后来的汉使带回的；汗血马是公元前101年李广利打大宛才得到的。都不是张骞亲手带回。', '「丝绸之路」是近代德国学者起的名字。游戏里长安小角色的对话是想象的。'],
+  },
 };
 
 // ===== 世界地图 =====
 const WORLD_DEF = {
-  name: '西北边疆', start: 'A', seed: 138,
+  name: '西域之路', start: 'A', seed: 138,
+  // 西 ← → 东。K 康居  Y 大宛  M 大月氏  B 大夏  X 匈奴营地  L 陇西  A 长安  H 打猎营地  C 羌中
+  // 关卡：2 大宛西边的山路  7 匈奴哨卡  3 汉朝边塞  6 南山雪岭
   coarse: [
-    '^^^^^^^^^^^^^^',
-    '^ddd^.h...^^^^',
-    '^dZd7..X.h^.T^',
-    '^ddd^h...T3L.^',
-    '^ddd^..h..^..^',
-    '^^^^^^^^^^^h.^',
-    '^^^^^^^^^^^TA^',
-    '^^^^^^^^^^^^^^',
+    '^^^^^^^^^^^^^^^^^^^^^',
+    '^.K.^.h^ddd^.h...^^^^',
+    '^...2.Y.ddd7..X.h^.T^',
+    '^.M.^..^ddd^h...T3L.^',
+    '^~~.^.h^ddd^..h..^..^',
+    '^.B.^^^^^^^^^^^^^^h.^',
+    '^^6^^^^^^^^^^^^^^^TA^',
+    '^*******H******C^^^^^',
+    '^^^^^^^^^^^^^^^^^^^^^',
   ],
   zones: [
-    { z: 'han', x0: 11, y0: 1, x1: 12, y1: 6 },
-    { z: 'steppe', x0: 5, y0: 1, x1: 9, y1: 4 },
-    { z: 'west', x0: 1, y0: 1, x1: 3, y1: 4 },
+    { z: 'han', x0: 18, y0: 1, x1: 19, y1: 6 },
+    { z: 'steppe', x0: 12, y0: 1, x1: 16, y1: 4 },
+    { z: 'desert', x0: 8, y0: 1, x1: 10, y1: 4 },
+    { z: 'ferghana', x0: 5, y0: 1, x1: 6, y1: 4 },
+    { z: 'xiyu', x0: 1, y0: 1, x1: 3, y1: 5 },
+    { z: 'nanshan', x0: 1, y0: 6, x1: 15, y1: 8 },
   ],
-  zoneInfo: { han: { ground: '.', mtn: '^' }, steppe: { ground: '.', mtn: '^' }, west: { ground: 'd', mtn: 'R' } },
+  zoneInfo: {
+    han: { ground: '.', mtn: '^' }, steppe: { ground: '.', mtn: '^' }, desert: { ground: 'd', mtn: 'R' },
+    ferghana: { ground: '.', mtn: '^' }, xiyu: { ground: '.', mtn: '^' }, nanshan: { ground: '*', mtn: 'S' },
+  },
 };
 const LOCS = {
   A: { id: 'changan', kind: 'town', icon: 'bigcity', art: 'capital', name: '长安城' },
   L: { id: 'longxi', kind: 'town', icon: 'fort', art: 'frontier', name: '陇西' },
-  X: { id: 'xiongnu', kind: 'town', icon: 'yurts', art: 'camp', name: '匈奴营地', need: () => !F().escaped, needMsg: '（不能回去了。往西走，去找月氏！）' },
-  Z: { id: 'dayuan', kind: 'event', icon: 'city', art: 'oasis', name: '大宛', ev: 'dayuan' },
+  X: { id: 'xiongnu', kind: 'town', icon: 'yurts', art: 'camp', name: '匈奴营地',
+    need: () => !F().escaped || (F().captured2 && !F().escaped2),
+    get needMsg() { return F().escaped2 ? '（不能回去了。往东走，回汉朝！）' : '（不能回去了。往西走，去找月氏！）'; } },
+  Y: { id: 'dayuan', kind: 'town', icon: 'city', art: 'oasis', name: '大宛' },
+  K: { id: 'kangju', kind: 'event', icon: 'yurts', art: 'wagoncamp', name: '康居', ev: 'kangju' },
+  M: { id: 'yuezhi', kind: 'event', icon: 'yurts', art: 'rivercourt', name: '大月氏', ev: 'yuezhi', need: () => F().kangju, needMsg: '（不认得路。先跟着向导，去北边的康居吧。）' },
+  B: { id: 'daxia', kind: 'town', icon: 'city', art: 'bazaarcity', name: '大夏', need: () => F().yuezhi, needMsg: '（先去大月氏的王庭，把汉朝的话带到吧。）' },
+  H: { id: 'hunt', kind: 'event', icon: 'peak', art: 'campfire', name: '雪山脚下', ev: 'hunt' },
+  C: { id: 'qiang', kind: 'event', icon: 'peak', art: 'hillcamp', name: '羌中', ev: 'qiang', need: () => F().hunt, needMsg: '（大家又冷又饿，走不动了。先在雪山脚下歇一歇，想办法弄点吃的吧。）' },
 };
 // 野外的文物：at 写 'world:区域' / 'town:城镇' / 'dun:场景:层'
 const RELICS = [
@@ -179,15 +281,17 @@ const RELICS = [
   { at: 'world:han', card: 'banliang', say: '草丛里有一枚铜钱，圆形方孔，上面写着「半两」。' },
   { at: 'world:steppe', card: 'mingdi', say: '草地上插着一支奇怪的箭，箭头上有几个小孔。拔出来一吹——呜呜作响！' },
 ];
-// 关卡在世界地图上的样子：3 是汉朝边塞的关城，7 是匈奴的哨卡
+// 关卡在世界地图上的样子：3 是汉朝边塞的关城，7 是匈奴的哨卡（2 和 6 用地形本身：山石、冰雪）
 const GATE_ART = { '3': 'hanpass', '7': 'xnpost' };
 const GATE_MSG = {
   '3': async () => {
-    if (F().ch >= 1) return '往东是回汉朝的路，可匈奴的哨骑把守得严严实实。……况且，你的使命在西边。';
+    if (F().ch >= 1) return '往东是回汉朝的路，可匈奴的哨骑把守得严严实实。';
     const c = await ask('甘父', '张大人，出了这道关，就是匈奴人的地方了。要出塞吗？', ['出塞！', '再准备一下']);
     if (c === 0) await STORY.chuSai();
   },
-  '7': () => F().escaped ? null : '匈奴的哨卡。几个骑兵正在巡逻，眼睛一直盯着你们。（现在还逃不掉。）',
+  '7': () => F().captured2 ? '哨卡又加了岗。这一次，往西是走不通了。' : '匈奴的哨卡。几个骑兵正在巡逻，眼睛一直盯着你们。（现在还逃不掉。）',
+  '2': () => '西边的山路又陡又险，没有向导会迷路。（先去大宛城里拜见国王吧。）',
+  '6': () => '南边是连绵的雪山，大雪封住了山路。',
 };
 const DUNGEONS = {};
 
@@ -195,11 +299,13 @@ const DUNGEONS = {};
 const TOWNS = {
   changan: {
     name: '长安城', size: 'big', theme: 'city', roof: '#3a3a4a',
+    onEnter: () => STORY.changanBack(),
     b: [
-      { slot: 0, type: 'rest', art: 'house', washing: true, label: '张家', ask: '回家歇一会儿吗？' },
+      { slot: 0, type: 'special', art: 'house', washing: true, label: '张家', ev: 'zhangHome' },
       { slot: 1, type: 'special', art: 'palace', label: '未央宫', ev: 'weiyang' },
       { slot: 2, type: 'house', art: 'market', label: '东市', who: '丝绸商人', say: ['上好的蜀锦、齐纨！……唉，可惜北边的匈奴年年来抢，商路都不太平。'], roof: '#5a3a6a' },
-      { slot: 5, type: 'house', art: 'bookshop', label: '书肆', who: '老先生', card: 'heqin', say: ['高祖皇帝当年被匈奴围在白登山，七天七夜，差点回不来。', '从那以后，汉朝只好和匈奴「和亲」——嫁公主，送丝绸，送粮食……', '可匈奴拿了东西，转头又来抢。皇上年轻气盛，怕是忍不了多久了。'], roof: '#2a5a3a' },
+      { slot: 5, type: 'house', art: 'bookshop', label: '书肆', who: '老先生', card: 'heqin', cardIf: () => F().ch < 4, roof: '#2a5a3a',
+        say: () => F().ch >= 4 ? ['张大人！你真的从西域回来了！', '大宛、康居、大月氏、大夏……老夫活了一辈子，连这些名字都没听过。', '快坐下，给老夫讲讲！老夫要一个字一个字记下来。'] : ['高祖皇帝当年被匈奴围在白登山，七天七夜，差点回不来。', '从那以后，汉朝只好和匈奴「和亲」——嫁公主，送丝绸，送粮食……', '可匈奴拿了东西，转头又来抢。皇上年轻气盛，怕是忍不了多久了。'] },
       { slot: 6, type: 'house', art: 'barracks', label: '兵营', who: '老兵', card: 'xiongnu', say: ['我在北边打过匈奴。他们人人骑马，从小就会射箭。', '咱们的步兵刚列好阵，人家的骑兵早就跑得没影了。'], roof: '#5a4a3a' },
       { slot: 9, type: 'house', art: 'house', roof: '#6a5040', label: '民宅', who: '老婆婆', say: ['孩子，听说宫里在招人去西边？那可是要穿过匈奴人的地盘啊……'] },
     ],
@@ -210,15 +316,18 @@ const TOWNS = {
       { sp: 'guard', name: '城门守卫', x: 14, y: 20, still: true, cond: () => !F().ganJoined, say: ['城外往西是陇西，再往西……就是匈奴人的地方了。'] },
       { sp: 'xnman', name: '匈奴降人', x: 21, y: 13, card: 'yuezhi', say: () => { F().heardYuezhi = 1; return ['我原来是匈奴人，后来逃到了汉朝。', '你知道月氏吗？他们以前住在西边的河西一带。我们匈奴打败了他们，杀了月氏王……', '还把月氏王的头骨做成了喝酒的器皿。月氏人逃到很远的西方，到现在还恨着匈奴呢。']; } },
       { sp: 'ganfu', name: '甘父', x: 3, y: 13, cond: () => !F().ganJoined, fn: () => STORY.ganfu() },
-      { sp: 'oldwoman', name: '老妇人', x: 16, y: 13, say: ['我儿子在陇西当兵，守烽火台。好几年没回来了……'] },
-      { sp: 'child', name: '小孩', x: 10, y: 18, say: () => F().appointed ? ['你要去很远很远的西边吗？那边有没有会飞的马？'] : ['我长大了也要当大将军，打匈奴！'] },
+      { sp: 'oldwoman', name: '老妇人', x: 16, y: 13, say: () => F().ch >= 4 ? ['张大人，你走的那年，我儿子还在陇西守烽火台。', '十三年了……你的头发也白了。'] : ['我儿子在陇西当兵，守烽火台。好几年没回来了……'] },
+      { sp: 'child', name: '小孩', x: 10, y: 18, say: () => F().ch >= 4 ? ['你就是从西边回来的张大人？', '西边真的有流「血汗」的马吗？真的有放几十年的葡萄酒吗？'] : F().appointed ? ['你要去很远很远的西边吗？那边有没有会飞的马？'] : ['我长大了也要当大将军，打匈奴！'] },
       { sp: 'merchant', name: '卖饼的', x: 23, y: 18, say: ['胡饼！刚出炉的胡饼！……这名字？我也不知道，大家都这么叫。'] },
-      { sp: 'scholar', name: '郎官同僚', x: 5, y: 6, card: 'changan', cardIf: () => F().appointed, say: () => F().appointed ? ['张兄真的要去月氏？……一路保重，一定要活着回来！', '等你回来，咱们再一起站在未央宫的台阶上，看整座长安城。'] : ['（操作：方向键移动，Z 键对话和调查，X 键打开菜单，撞到门就能进屋。）', '张兄，听说皇上要找人去出使西边的月氏，满朝文武没人敢应。'] },
+      { sp: 'scholar', name: '郎官同僚', x: 5, y: 6, card: 'changan', cardIf: () => F().appointed, say: () => F().ch >= 4 ? ['张兄！你真的活着回来了！', '十三年……当年和你一起出发的一百多人呢？……唉，不说了，回来就好。'] : F().appointed ? ['张兄真的要去月氏？……一路保重，一定要活着回来！', '等你回来，咱们再一起站在未央宫的台阶上，看整座长安城。'] : ['（操作：方向键移动，Z 键对话和调查，X 键打开菜单，撞到门就能进屋。）', '张兄，听说皇上要找人去出使西边的月氏，满朝文武没人敢应。'] },
     ],
   },
   longxi: {
     name: '陇西', size: 'small', theme: 'desert', roof: '#6a4a2a', yOffset: 1,
-    onEnter: async () => { if (F().longxiSeen) return; F().longxiSeen = 1; await narr(['陇西。汉朝西北边境的最后一座城。', '城外西边就是边塞。再往西走，就进入匈奴的地盘了。']); },
+    onEnter: async () => {
+      if (F().escaped2 && !F().longxiBack) { F().longxiBack = 1; await narr(['陇西！是汉朝的土地！', '守城的士兵盯着你们看了半天——你们穿着匈奴人的皮袍，他们根本认不出来。']); await say('张骞', '我是十三年前出使月氏的张骞，回来了！'); return; }
+      if (F().longxiSeen) return; F().longxiSeen = 1; await narr(['陇西。汉朝西北边境的最后一座城。', '城外西边就是边塞。再往西走，就进入匈奴的地盘了。']);
+    },
     b: [
       { slot: 0, type: 'rest', art: 'station', label: '驿站', keeper: '驿卒', ask: '使者大人，要在驿站歇歇脚吗？' },
       { slot: 4, type: 'house', art: 'office', label: '郡府', who: '陇西郡守', card: 'longxi', say: ['你就是要去月氏的张骞？', '出了陇西往西，到处都是匈奴的骑兵。一百多人的使团，太显眼了……', '本官能做的，只有为你们备足干粮和水。保重！'] },
@@ -242,11 +351,42 @@ const TOWNS = {
     decor: ['field', 'field', 'trees'],
     features: { tiles: ['r', 'b', 'b', 'k'] },
     npcs: [
-      { sp: 'xnguard', name: '匈奴看守', x: 10, y: 14, still: true, say: () => F().tenYears ? ['又去溜达？去吧去吧。都十年了，你还能跑到哪儿去？'] : ['单于说了，你们哪儿也不许去！营地附近随便走走可以。'] },
+      { sp: 'xnguard', name: '匈奴看守', x: 10, y: 14, still: true, say: () => F().captured2 ? ['又是你！上次让你跑了，这回看你往哪儿跑。'] : F().tenYears ? ['又去溜达？去吧去吧。都十年了，你还能跑到哪儿去？'] : ['单于说了，你们哪儿也不许去！营地附近随便走走可以。'] },
       { sp: 'xnman', name: '牧民', x: 4, y: 6, card: 'youmu', say: ['再过些日子，这片草就吃光了。到时候整个营地都要搬走。', '哪里有水、有草，我们就去哪里。草原就是我们的家。'] },
       { sp: 'xnchild', name: '匈奴小孩', x: 15, y: 6, say: () => G.quests.lamb && G.quests.lamb.st === 'done' ? ['看！我骑着小羊射中了一只老鼠！', '你也学会说我们的话啦！'] : ['你说话怎么怪怪的？'] },
-      { sp: 'huqi', name: '胡妻', x: 9, y: 12, cond: () => F().tenYears, say: () => F().escapeTalk ? ['……我知道你的心一直在西边。那根竹杖，你天天擦，十年都没放下过。'] : ['孩子又长高了。他说话一半像你，一半像我。'] },
-      { sp: 'son', name: '儿子', x: 11, y: 12, cond: () => F().tenYears, say: ['阿爸，汉朝是什么样子的？那里也有这么大的草原吗？'] },
+      { sp: 'huqi', name: '胡妻', x: 9, y: 12, cond: () => F().tenYears && !F().escaped2, say: () => F().captured2 ? ['单于病得很重。营地里的人都在偷偷说，要出大事了。', '等乱起来的时候，就是我们走的时候。'] : F().escapeTalk ? ['……我知道你的心一直在西边。那根竹杖，你天天擦，十年都没放下过。'] : ['孩子又长高了。他说话一半像你，一半像我。'] },
+      { sp: 'son', name: '儿子', x: 11, y: 12, cond: () => F().tenYears && !F().escaped, say: ['阿爸，汉朝是什么样子的？那里也有这么大的草原吗？'] },
+    ],
+  },
+  dayuan: {
+    name: '大宛', size: 'small', theme: 'village', roof: '#8a6a40',
+    onEnter: () => STORY.dayuanEnter(),
+    b: [
+      { slot: 0, type: 'special', art: 'mudpalace', label: '王宫', ev: 'dyPalace' },
+      { slot: 1, type: 'house', art: 'winery', label: '葡萄酒坊', who: '酿酒人', card: 'putaojiu', say: ['来，尝尝我们大宛的葡萄酒！', '城里的富人家，地窖里藏着一万多石酒，放几十年都不坏。', '对了，城外的马吃的那种开紫花的草，叫苜蓿。马最爱吃了。'] },
+      { slot: 2, type: 'house', art: 'horsefarm', label: '马场', who: '养马人', say: ['看这些马！个子高，跑得快，大宛的马是天下最好的。', '有的马跑起来，脖子上流的汗是红的，像血一样。'] },
+      { slot: 4, type: 'house', art: 'flathouse', label: '民居', who: '农夫', say: ['我们大宛人不像匈奴那样赶着牛羊到处走。', '我们住在有城墙的城里，种稻子、种麦子。大大小小的城，有七十多座呢。'] },
+    ],
+    decor: ['garden', 'field', 'trees'],
+    npcs: [
+      { sp: 'dyman', name: '马夫', x: 15, y: 6, say: ['大宛的马，是「天马」的后代！'] },
+      { sp: 'dychild', name: '大宛小孩', x: 4, y: 6, say: () => F().gate2 ? ['你们要去月氏？那可远啦，要走好多好多天！'] : ['你们从哪里来？你们的衣服好奇怪！'] },
+      { sp: 'dywoman', name: '大宛妇人', x: 9, y: 12, say: ['东边的汉朝？我只听商人说过，那里有一种又软又亮的布……'] },
+    ],
+  },
+  daxia: {
+    name: '大夏', size: 'small', theme: 'desert', roof: '#8a6a40',
+    onEnter: () => STORY.daxiaEnter(),
+    b: [
+      { slot: 0, type: 'special', art: 'courtyard_inn', label: '客舍', ev: 'dxInn' },
+      { slot: 1, type: 'house', art: 'bazaar', label: '蓝市', who: '市场管事', card: 'lanshi', say: ['欢迎来到蓝市城的大市场！这里什么都有卖。', '我们大夏人最会做生意。打仗？哎呀，那可不行，我们的兵很弱，最怕打仗了。'] },
+      { slot: 2, type: 'house', art: 'flathouse', label: '民居', who: '大夏老人', say: ['月氏人来了以后，我们就归顺了他们。', '只要能安安稳稳做生意，谁当头儿都一样。'] },
+    ],
+    decor: ['plaza', 'trees', 'garden'],
+    npcs: [
+      { sp: 'dxman', name: '大夏商人', x: 4, y: 6, card: 'qiongzhu', say: ['客人，看看这根竹杖，节又高又直！还有这匹布，结实得很。', '从哪儿来的？是商人从东南边的身毒买来的。'] },
+      { sp: 'merchant', name: '钱币商', x: 15, y: 6, card: 'yinbi', say: ['你见过安息国的银币吗？上面印着国王的脸！', '国王死了，就换一种新钱。可惜我手里这枚，你看不出是哪个国王了。'] },
+      { sp: 'dychild', name: '大夏小孩', x: 9, y: 12, say: ['我爹说，你们是从太阳升起的地方来的？'] },
     ],
   },
 };
@@ -266,6 +406,13 @@ const QUESTS = {
     done: ['咩咩！就是它！', '我教你一句我们的话吧：「谢谢」是这么说的……', '你学得真快！'],
     after: '你看我骑羊射箭！',
     reward: { cards: ['qiyang', 'yuyan'] } },
+  musu: { name: '马爱吃的草', town: 'dayuan', npc: '马夫', ch: 2, type: 'find', find: 'world:ferghana', item: 'q_musu', icon: 'musu',
+    desc: '在大宛城外的草地上，给马夫找一捆苜蓿回来。',
+    ask: ['唉，马圈里的苜蓿吃完了，马饿得直叫。', '城外的草地上长着苜蓿，开紫色的小花。你们能帮我割一捆回来吗？'],
+    wait: '苜蓿就长在城外的草地上，开着紫色的小花。',
+    done: ['就是它！你们看，马闻到味道就跑过来了！', '告诉你们一个秘密：我们大宛的马，有的流的汗是红的……'],
+    after: '吃饱了苜蓿，马跑得更快了！',
+    reward: { cards: ['hanxue'] } },
 };
 
 // ===== 剧情 =====
@@ -288,6 +435,7 @@ const STORY = {
     autosave();
   },
   async weiyang() {
+    if (F().ch >= 4) { if (F().metEmperor) await narr('（皇上还在翻看你画的西域地图，看得入了迷。）'); else await STORY.fuming(); return; }
     if (F().appointed) { await narr('（未央宫里，汉武帝正等着你的好消息。去城西找甘父吧。）'); return; }
     Snd.play('sad');
     await narr('未央宫大殿。汉武帝刘彻坐在殿上，大臣们分列两旁。');
@@ -336,6 +484,7 @@ const STORY = {
     autosave();
   },
   async chanyuTent() {
+    if (F().captured2) { await narr('（大帐外站满了卫兵。听说单于病得很重，谁也不许进去。）'); return; }
     if (F().tenYears) { await narr('（单于大帐里正在喝酒唱歌，没人理会你。）'); return; }
     await say('单于', ['又是你。还想着去月氏？', '留在草原吧。这里有吃不完的羊肉，喝不完的马奶。']);
   },
@@ -347,6 +496,7 @@ const STORY = {
       return;
     }
     if (!F().escaped) { await STORY.escapeNight(); return; }
+    if (F().captured2 && !F().escaped2) { await STORY.chaos(); return; }
   },
   async tenYears() {
     await narr('夜深了。你躺在毡帐里，摸着身边的汉节，慢慢睡着了……');
@@ -384,12 +534,179 @@ const STORY = {
     await say('甘父', ['往西！一直往西！', '穿过那道哨卡，就是去大宛的路了！']);
     autosave();
   },
-  async dayuan() {
-    await narr(['你们向西走了几十天。', '翻过沙丘，前方出现了一座绿洲中的城——', '大宛到了！']);
+  // ===== 第二章 大宛与月氏 =====
+  async dayuanEnter() {
+    if (F().dySeen) return;
+    F().dySeen = 1;
+    await narr(['你们向西走了几十天。', '翻过沙丘，前方出现了一片绿油油的田野，还有一座有城墙的城——', '大宛到了！']);
     await recap(1);
+    await chapter(2);
+    await narr(['大宛人不放牧。他们住在有城墙的城里，种稻子和麦子。', '几个大宛士兵围了过来。一听说你们是汉朝的使者，连忙跑去报告国王。']);
+    await narr('（去王宫拜见大宛王吧。）');
+  },
+  async dyPalace() {
+    if (F().gate2) { await say('大宛王', ['一路平安！到了月氏，别忘了替我问好。', '还有——别忘了你的承诺！']); return; }
+    Snd.play('sad');
+    await narr('大宛王宫。国王一看见你们手里的汉节，眼睛都亮了。');
+    await say('大宛王', ['汉朝来的使者？我早就听说，汉朝是个很富有的大国！', '我一直想和汉朝来往，可是找不到路……', '你要去哪儿？']);
+    await narr('（史书里，大宛王只留下了这一句话：「若欲何之？」——你要到哪里去？）');
+    await getCard('dywang');
+    await say('张骞', ['我替汉朝出使月氏，路被匈奴挡住，被关了十多年，好不容易才逃出来。', '请大王派人送我去月氏。等我回到汉朝，汉朝送给大王的财物，多得说不完！']);
+    await say('大宛王', ['好！我派最好的向导和翻译，送你们去！']);
+    await getCard('chengnuo');
+    F().gate2 = 1;
+    Snd.play(MapScene.musicFor());
+    await narr('（有向导带路了。出城往西翻过山路，先去北边的康居。）');
+    autosave();
+  },
+  async kangju() {
+    if (F().kangju) { await narr('康居的营帐。牛羊在草地上吃草，大家已经把你们送上路了。'); return; }
+    await narr(['康居的营帐散在草原上。康居人和匈奴人一样，赶着牛羊四处搬家。', '大宛的向导走上前，用当地话说明了来意。']);
+    await say('康居人', ['汉朝的使者？大宛送来的客人，就是我们的客人。', '月氏的王庭在南边的大河旁。我们派人接着送你们去！']);
+    await getCard('chuansong');
+    F().kangju = 1;
+    await narr('（往南走，大月氏的王庭就在妫水北边。）');
+    autosave();
+  },
+  async yuezhi() {
+    if (F().yuezhi) { await narr('月氏人在河边放马、唱歌。他们的日子过得很安乐。'); return; }
+    Snd.play('sad');
+    await narr(['妫水——就是今天的阿姆河。河的北边，是大月氏的王庭。', '你们终于见到了月氏人。为了这一天，你们走了十多年。']);
+    await say('月氏大臣', ['老王被匈奴杀了以后，我们立了新王，一路搬到了这里。']);
+    await narr('（新王是谁？《史记》说是太子，《汉书》说是王后。两本书说得不一样。）');
+    await getCard('xinwang');
+    await say('张骞', ['汉朝愿意和大月氏一起，夹击匈奴，为老王报仇！']);
+    await say('月氏大臣', ['……这里的土地肥，又没有敌人，大家过得很安乐。', '汉朝离这里太远了。报仇的事，还是算了吧。']);
+    await getCard('anle');
+    await say('张骞', '……我不死心。我再想想办法！');
+    F().yuezhi = 1;
+    Snd.play(MapScene.musicFor());
+    await narr('（月氏让南边的大夏归顺了自己。过了妫水的渡口往南，去大夏再试一试。）');
+    autosave();
+  },
+  async daxiaEnter() {
+    if (F().dxSeen) return;
+    F().dxSeen = 1;
+    await narr(['大夏人住在城里，城中间是热闹的大市场。', '叫卖声、讨价还价声，从早到晚都没停过。']);
+    await narr('（逛逛市场吧。累了就去「客舍」歇脚。）');
+  },
+  async dxInn() {
+    if (F().ch >= 3) { await rest({ keeper: '客舍老板', ask: '客人，要歇一歇吗？' }); return; }
+    if (!['lanshi', 'qiongzhu', 'yinbi'].some(hasCard)) { await narr('（先去市场转转，看看大夏人都卖些什么吧。）'); return; }
+    const c = await ask('甘父', '张大人，我们在大夏已经住了一年多了，月氏还是不肯答应……回汉朝吧？', ['回汉朝', '再住一阵']);
+    if (c !== 0) { await say('甘父', '好，再等等看。'); return; }
+    await fadeOut(600);
+    await card(['一年多过去了。'], { auto: 2400 });
+    await fadeIn(600);
+    await say('张骞', ['我没能说服月氏……', '可是，西域的路、西域的国家，我都记在心里了。这些都要告诉皇上！']);
+    await getCard('yaoling');
+    await recap(2);
+    await chapter(3);
+    await say('甘父', ['这次别走匈奴的草原了。', '我们沿着南边的大山走，从羌人住的地方绕回汉朝！']);
+    F().gate6 = 1;
+    await getCard('nanshan');
+    await narr('（出了城往南，雪山的路打开了。）');
+    autosave();
+  },
+  // ===== 第三章 归途 =====
+  async hunt() {
+    if (F().hunt) { await narr('火堆还在冒着烟。吃饱了，继续往东走吧。'); return; }
+    await narr(['雪山脚下又冷又饿，干粮早就吃光了。', '大家缩在火堆边，谁也不说话。']);
+    await say('甘父', '张大人，等着！');
+    Snd.sfx('wind');
+    await narr('（甘父拉开弓——嗖！远处的一只野羊应声倒下。）');
+    await say('张骞', ['好箭法！今晚有烤肉吃了！', '甘父，这一路要是没有你，我们早就饿死了。']);
+    await getCard('sheshou');
+    F().hunt = 1;
+    await narr('（继续往东走，前面就是羌人住的地方。）');
+    autosave();
+  },
+  async qiang() {
+    if (F().captured2) return;
+    await narr(['羌中的山谷里，牧人的营帐星星点点。', '再往东走，就是汉朝了——']);
+    Snd.sfx('encounter'); Shake.start(8, 700);
+    await narr(['马蹄声！是匈奴的骑兵！', '你们又被抓住了。']);
+    F().captured2 = 1; F().gate7 = 0;
+    await fadeOut(600);
+    await card(['你们又被押回了匈奴的营地。'], { auto: 2600 });
+    const p = doorPos('xiongnu', 0);
+    Fade.a = 1;
+    Scene = MapScene; MapScene.enter('town:xiongnu', p.x, p.y, 'up');
+    await fadeIn(600);
+    Snd.play('sad');
+    await say('胡妻', ['……你回来了。', '我就知道，我们还会再见的。']);
+    await say('张骞', '这一次，我们一起走。');
+    Snd.play(MapScene.musicFor());
+    await narr('（回「你的毡帐」歇着，等待机会。）');
+    autosave();
+  },
+  async chaos() {
+    await narr('你躺在毡帐里，等啊等……');
+    await fadeOut(900);
+    Snd.play('sad');
+    await card(['又过了一年多……'], { auto: 2400 });
+    await card(['一天，单于死了。'], { auto: 2400 });
+    await card(['单于的弟弟左谷蠡王，带兵攻打太子，', '要自己当单于。'], { lh: 46 });
+    Snd.sfx('encounter'); Shake.start(10, 900);
+    await card(['整个营地乱成了一团！'], { big: true });
+    await getCard('luan');
+    await fadeIn(600);
+    await say('甘父', '张大人，就是现在！');
+    await say('胡妻', '我跟你们走！');
+    F().escaped2 = 1; F().gate3 = 1;
+    await joinParty('huqi');
+    await fadeOut(600);
+    await card(['你们骑上马，趁乱冲出了营地……'], { auto: 2600 });
+    await toWorldAt('X');
+    await say('张骞', ['往东！回汉朝！']);
+    await narr('（汉朝边塞的关城，就在东边。）');
+    autosave();
+  },
+  // ===== 终章 凿空 =====
+  async changanBack() {
+    if (!F().escaped2 || F().homeBack) return;
+    F().homeBack = 1;
+    await narr(['十三年了。', '长安城还是那么热闹。可是你出发时带走的一百多人，只剩下身边的甘父。']);
+    await recap(3);
+    await chapter(4);
+    await narr('（去未央宫，向皇上复命。）');
+  },
+  async fuming() {
+    Snd.play('sad');
+    await narr('未央宫大殿。汉武帝快步走下台阶。');
+    await say('张骞', ['臣张骞，回来复命。', '臣没能说服月氏……可大宛、康居、大月氏、大夏，臣都亲自去过了。']);
+    await say('汉武帝', '十三年了……一百多人出发，只回来了你们两个？');
+    await getCard('erren');
+    await say('汉武帝', ['你带回来的，是比月氏更宝贵的东西——西域的路！', '朕封你为太中大夫，封甘父为奉使君！']);
+    await getCard('jiangshang');
+    F().metEmperor = 1;
+    Snd.play(MapScene.musicFor());
+    await narr('（回家好好歇一歇吧。）');
+    autosave();
+  },
+  async zhangHome() {
+    if (F().ch >= 4 && F().metEmperor) { await STORY.epilogue(); return; }
+    await rest({ ask: '回家歇一会儿吗？' });
+  },
+  async epilogue() {
+    const c = await ask(null, '（回家歇下，故事就要结束了。准备好了吗？）', ['好了', '再逛逛']);
+    if (c !== 0) return;
+    await fadeOut(900);
+    Snd.play('ending');
+    await card(['很多年以后……'], { big: true });
+    await card(['张骞跟着大将军卫青出征。', '他知道哪里有水、哪里有草，军队一路不缺水草。'], { lh: 46 });
+    await getCard('bowang');
+    await card(['汉朝的使者一批接一批往西走。', '史书说，「使者相望于道」——', '路上的使者，一个能望见下一个。'], { lh: 46 });
+    await card(['使者们带回了葡萄和苜蓿的种子，', '种满了肥沃的田地。'], { lh: 46 });
+    await getCard('putao');
+    await card(['写《史记》的司马迁说：', '张骞「凿空」——', '他第一个打通了去西域的路。'], { lh: 46 });
+    await getCard('zaokong');
+    await card(['又过了将近两千年……', '一位德国学者把这条路，', '叫作「丝绸之路」。'], { lh: 46 });
+    await getCard('sichou');
+    await recap(4);
     await fadeOut(400);
     Snd.play('title');
-    await card(['未完待续', '', '第二章 大宛与月氏', '（这一章还在制作中）'], { big: true });
+    await card(['张骞传', '— 全剧终 —'], { big: true });
     await card(['感谢游玩！', '', `你一共收集了 ${cardCount()} / ${Object.keys(CARDS).length} 张史料卡。`, '想集齐全部史料卡？再来一次「新的旅程」吧！'], { lh: 40 });
     UI.stack.length = 0;
     titleLoop();
