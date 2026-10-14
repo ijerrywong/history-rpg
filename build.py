@@ -26,5 +26,10 @@ body = re.sub(r'<script charset="utf-8" src="([^"]+)"></script>', inline, html)
 i = body.index('<div id="wrap">')
 os.makedirs('dist', exist_ok=True)
 out = f'dist/{title}.html'
-open(out, 'w', encoding='utf-8').write('<!doctype html>\n<html lang="zh-CN">\n<head>\n' + body[:i] + '</head>\n<body>\n' + body[i:] + '\n</body>\n</html>\n')
+author = re.search(r"author:\s*'([^']+)'", story); lic = re.search(r"license:\s*'([^']+)'", story)
+eng = dict(re.findall(r"(\w+): '([^']+)'", re.search(r'const ENGINE_INFO = \{[^}]+\}', open('js/engine/menu.js', encoding='utf-8').read()).group(0)))
+notice = ('<!--\n  ' + title + ' —— 剧本作者：' + (author.group(1) if author else '佚名') + '，协议：' + (lic.group(1) if lic else '未注明') + '\n'
+          f"  游戏引擎：{eng['name']} © {eng['author']}，{eng['license']}（https://mozilla.org/MPL/2.0/）\n"
+          f"  史料卡图片各有作者和许可，见每张卡。本文件即源代码。联系：https://{eng['home']}\n-->\n")
+open(out, 'w', encoding='utf-8').write('<!doctype html>\n' + notice + '<html lang="zh-CN">\n<head>\n' + body[:i] + '</head>\n<body>\n' + body[i:] + '\n</body>\n</html>\n')
 print(f'已生成 {out}（{os.path.getsize(out) // 1024}KB，内嵌图片 {len(imgs)} 张）')

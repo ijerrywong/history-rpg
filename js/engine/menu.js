@@ -157,6 +157,17 @@ const TitleScene = {
     if (GAME.tagline) txt(GAME.tagline, W / 2, H - 34, { align: 'center', size: 15, color: '#8a80a8' });
   }
 };
+// 引擎的署名和协议；题材自己的作者和协议写在剧本的 GAME.author / GAME.license
+const ENGINE_INFO = { name: '像素历史 RPG 模板', author: '剑宁（jerrywong）', license: 'MPL-2.0', home: 'github.com/ijerrywong' };
+async function aboutScreen() {
+  await card(['关于', '',
+    `《${GAME.title}》剧本：${GAME.author || '佚名'}　协议：${GAME.license || '未注明'}`,
+    GAME.license && GAME.license.includes('NC') ? '可以免费玩、转发、改编，但不能拿去卖钱' : '',
+    '史料卡图片的作者和许可，印在每张卡的下方',
+    `游戏引擎：${ENGINE_INFO.name}　© ${ENGINE_INFO.author}　${ENGINE_INFO.license}`,
+    '这个网页文件本身就是源代码',
+    `联系作者：${ENGINE_INFO.home}`], { lh: 40, size: 18, big: true });
+}
 async function helpScreen() {
   await card(['操作说明', '', '方向键 / WASD：移动、选择', 'Z / 空格 / 回车：确认、调查、对话', 'X / Esc：取消；在地图上打开菜单', '手机：屏幕下方的十字键与 A / B 键', '', '和每个人聊聊天，地上闪光的是史料！'], { lh: 38, size: 21, big: true });
 }
@@ -164,7 +175,7 @@ async function titleLoop() {
   Scene = TitleScene; Snd.play('title'); Fade.a = 0;
   for (; ;) {
     const has = [0, 1, 2, 3].some(s => loadSlot(s));
-    const c = await menu([{ label: '新的旅程' }, { label: '继续旅程', disabled: !has }, { label: '游戏设置' }, { label: '操作说明' }], { x: W / 2 - 110, y: 300, w: 220, cancel: false });
+    const c = await menu([{ label: '新的旅程' }, { label: '继续旅程', disabled: !has }, { label: '游戏设置' }, { label: '操作说明' }, { label: '关于' }], { x: W / 2 - 110, y: 300, w: 220, cancel: false });
     if (c === 0) {
       newGame();
       await fadeOut(600);
@@ -174,5 +185,6 @@ async function titleLoop() {
     if (c === 1) { if (await loadMenu(true)) return; }
     if (c === 2) await settingsMenu();
     if (c === 3) await helpScreen();
+    if (c === 4) await aboutScreen();
   }
 }

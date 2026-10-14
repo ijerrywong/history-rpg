@@ -10,6 +10,8 @@ const GAME = {
   title: '张骞传',
   subtitle: '出使西域',
   tagline: '像素历史角色扮演 · 公元前138年',
+  author: '剑宁（jerrywong）',
+  license: 'CC BY-NC-SA 4.0',
   chapters: ['序章 未央宫', '第一章 匈奴十年', '第二章 大宛与月氏', '第三章 归途', '终章 凿空'],
   party: ['zhang'],
   titleSprites: ['zhangqian', 'ganfu', 'soldier', 'soldier'],
