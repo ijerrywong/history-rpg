@@ -1,11 +1,13 @@
 #!/usr/bin/env node
 // 无头试玩：node tools/playtest.js <剧本id>
 // 读 tests/<剧本id>.test.js：按步骤把剧情从头走到尾，再检查地图路线。全部通过退出码 0。
-const path = require('path');
+const fs = require('fs'), path = require('path');
 const { boot, H, ROOT } = require('./lib/sandbox');
 const id = process.argv[2] || 'zhangqian';
-const spec = require(path.join(ROOT, 'tests', id + '.test.js'))(H);
-const story = path.join(ROOT, 'js', 'story', id + '.js');
+const story = path.join(ROOT, 'js', 'story', id + '.js'), test = path.join(ROOT, 'tests', id + '.test.js');
+if (!fs.existsSync(story)) { console.log(`没有剧本 js/story/${id}.js`); process.exit(2); }
+if (!fs.existsSync(test)) { console.log(`没有试玩脚本 tests/${id}.test.js`); process.exit(2); }
+const spec = require(test)(H);
 const fails = [];
 (async () => {
   const g = boot(story);

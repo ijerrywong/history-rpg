@@ -22,6 +22,10 @@ node tools/engine-check.js          # 末行「全部通过」，退出码 0
 
 ## WI-1 试玩脚本：剧本 id 写错时给出看得懂的提示
 
+**Status:** DONE — 2026-10-16
+**Changed:** tools/playtest.js
+**Verified:** `node tools/playtest.js nosuch` → 只输出「没有剧本 js/story/nosuch.js」，exit=2；只有剧本没有测试时（临时探针 js/story/zz-probe.js，已删）→「没有试玩脚本 tests/zz-probe.test.js」，exit=2；playtest zhangqian「全部通过」exit=0；engine-check「全部通过」exit=0
+
 现状：`node tools/playtest.js nosuch` 打出一大段 Node 堆栈（`Cannot find module .../tests/nosuch.test.js`），退出码 1，和"测试不通过"的退出码一样，分不清。
 
 要求：
@@ -36,6 +40,10 @@ node tools/engine-check.js          # 末行「全部通过」，退出码 0
 - 通用验证通过
 
 ## WI-2 探索场景（DUNGEONS）补回归测试
+
+**Status:** DONE — 2026-10-16
+**Changed:** tests/fixtures/minimal-story.js, tools/engine-check.js（没有暴露引擎 bug，引擎未改）
+**Verified:** engine-check 输出「探索场景（进入、onEnter、下楼、onFloor）： 通过」、末行「全部通过」exit=0；删掉 fixture 的 onFloor 后 engine-check「第 2 层的 onFloor 事件没触发」exit=1，已恢复；playtest zhangqian「全部通过」exit=0
 
 现状：引擎支持探索场景（`js/engine/world.js` 的 `genDungeon`，`main.js` 里的 `onFloor`，进入时的 `onEnter`），但张骞剧本没用到，没有任何测试走过这条路。
 
@@ -56,6 +64,10 @@ node tools/engine-check.js          # 末行「全部通过」，退出码 0
 - 通用验证通过
 
 ## WI-3 剧本格式文档补「重生线」一节
+
+**Status:** DONE — 2026-10-16
+**Changed:** .claude/skills/new-history-game/references/story-format.md, .claude/skills/new-history-game/IMPROVEMENTS.md
+**Verified:** 8 个函数名 + intro/res/know/reflect 在新一节和 js/engine/rebirth.js 里 grep 均 ≥1；playtest zhangqian「全部通过」exit=0；engine-check「全部通过」exit=0
 
 现状：重生线的引擎能力在 `js/engine/rebirth.js`（文件头注释里列了剧本要提供什么），但 `.claude/skills/new-history-game/references/story-format.md` 没有这一节，下一个题材做重生线时没有文档可查。
 

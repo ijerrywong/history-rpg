@@ -103,6 +103,35 @@ jiashu: { ..., type: 'deliver', item, to: { town, npc, say: [] } },
 
 曲子：title town field dungeon sad dream sea ending，也可以 `SONGS.xxx = { bpm, style, lead, loop, mel, ch }` 自己加（参考 steppe）。
 
+## REBIRTH —— 重生线（可选）
+正史通关后，回到关键时刻，在当时的条件下重新做决定。引擎在 `js/engine/rebirth.js`；剧本里没有 `REBIRTH` 就没有重生入口。
+范例：`js/story/zhangqian.js` 的 `REBIRTH` 定义和 `STORY.rbHome` 等函数。
+```js
+const REBIRTH = {
+  intro: async () => {},   // 必写：放好 Scene 和起始位置，开始一局（可以先给人物、道具、flag、消息）
+  res: [{ id, name, start?, get?: () => 数, bool? }],   // 必写：右上角显示的资源。start 初始值（默认 0）；
+                           // get 用来算派生值（如消息条数，有 get 就不存数）；bool 显示成「有 / 无」
+  know: { id: '一句话' },  // 必写：能打听到的消息，推演报告里分「打听到的 / 没打听到的」列出
+  reflect: { q: '反思题', opts: ['选项', ...] },        // 可选：结局后问一道反思题，答案记进报告
+};
+```
+`GAME.motto = { text, src, kid, start?, clear?, end? }`（可选）：引文卡。`text` 原文、`src` 出处、`kid` 给孩子的一句话；
+`start` 开局、`clear` 正史通关（剧本自己调 `mottoCard(GAME.motto.clear)`）、`end` 推演报告之后，各附一句。
+
+剧本里用：
+- `isRebirth()` —— 现在是不是重生局，正史和重生共用的剧情靠它分叉
+- `res(id)` —— 读资源当前值（有 `get` 的走 `get`）
+- `addRes(id, n, 原因)` —— 资源加减（不会低于 0），弹一句提示并记进日志
+- `learn(id)` —— 记下一条消息（只在重生局里生效，记过的不重复）
+- `knows(id)` —— 是否已经打听到这条消息
+- `decide(id, 谁, 问题, opts)` —— 决策点，返回选中的序号。`opts: [{ label, cost?: { 资源id: 数 }, need?: 消息id 或 [消息id], why: [{ t: 理由, card?: 依据卡 }] }]`；
+  没打听到 `need` 或资源不够 `cost` 的选项是灰的；`why` 多于一条时再问「你为什么这么选？」
+- `endRebirth({ title, type: '史实' | '合理推演' | '历史上没有发生', lines: [], compare: [] })` —— 结局：显示推演报告、反思题，保存报告，回标题画面
+- `markCleared()` —— 标记正史已通关，标题画面出现「重生」（放在正史结局里）
+
+只在重生里拿的史料卡加 `rebirth: true`（不算进正史的收集数）。
+试玩开关：网址后面加 `?rebirth` 或 `#rebirth`，不用先通关就能进重生。
+
 ## tests/<id>.test.js —— 试玩脚本（必写）
 ```js
 module.exports = H => ({
@@ -112,3 +141,10 @@ module.exports = H => ({
 });
 ```
 steps 要走到每一张卡、每一个任务；routes 至少检查：每段主线路通、关卡没打开前过不去、文物和任务物品走得到。
+
+有重生线时再加 `rebirth`，每条路径从 `startRebirth()` 开局走到一个结局（范例：`tests/zhangqian.test.js`）：
+```js
+  rebirth: [{ name: '路径名', picks: { 决策id: 选项序号, '决策id:why': 理由序号 }, steps: [H.door('…'), H.enter('L')], ending: '结局 title' }],
+```
+`picks` 按 `decide` 的 id 指定自动玩家选哪个（没写的选第一个能选的）；`ending` 要和 `endRebirth` 的 `title` 一字不差。
+所有路径合起来要拿到每一张 `rebirth: true` 的卡。
