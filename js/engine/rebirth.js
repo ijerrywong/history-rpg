@@ -9,6 +9,7 @@
 //   }
 //   GAME.motto = { text, src, kid, start?, clear?, end? }   // 开局、通关、报告末尾显示的引文
 // 剧本里用：isRebirth()、res(id)、addRes(id, n, 原因)、learn(id)、knows(id)、decide(...)、endRebirth(...)、markCleared()
+// 续玩：重生进度用正史的 autosave() 存；剧本只该在剧情走完一段的安全点存（进城、换段落），不要在决策中途存
 
 const isRebirth = () => !!(G && G.mode === 'rebirth');
 const hasRebirth = () => typeof REBIRTH !== 'undefined';
@@ -85,8 +86,25 @@ async function decide(id, who, q, opts) {
   return c;
 }
 
-// ----- 开局 -----
+// ----- 开局 / 续玩 -----
+// 重生的进度只有一份（进城、歇息时自动存），一局结束或从头再来时清掉
+const loadRebirth = () => loadSlot(0, rbKey);
+const clearRebirth = () => store(rbKey(0), null);
+async function rebirthEntry() {
+  const d = loadRebirth();
+  if (!d) { await startRebirth(); return true; }
+  const c = await menu([{ label: '接着上次的', right: `${d.meta.place} ${fmtTime(d.meta.time)}` }, '从头再来'], { x: 40, y: 200, w: W - 80, title: '上次的重生还没走完', pick: 'resume' });
+  if (c < 0) return false;
+  if (c === 0) { Snd.sfx('save'); await resumeRebirth(d); return true; }
+  if (await ask(null, '上次那一局的进度会丢掉。从头再来吗？', ['从头再来', '算了']) !== 0) return false;
+  await startRebirth(); return true;
+}
+async function resumeRebirth(d) {
+  await loadGameData(d);
+  UI.stack.unshift(new Panel(drawResPanel));
+}
 async function startRebirth() {
+  clearRebirth();
   newGame();
   G.mode = 'rebirth'; G.res = {}; G.know = {}; G.log = [];
   for (const d of REBIRTH.res) if (!d.get) G.res[d.id] = d.start || 0;
@@ -95,6 +113,7 @@ async function startRebirth() {
   UI.stack.unshift(new Panel(drawResPanel));
   await REBIRTH.intro();
   G.res0 = Object.fromEntries(REBIRTH.res.map(d => [d.id, res(d.id)])); // 开局时手里有什么（intro 里可能先给了东西）
+  autosave(); // intro 里存的那份还没有 res0，续玩到结局会出不了报告
 }
 
 // ----- 结局和推演报告 -----
@@ -153,6 +172,7 @@ async function endRebirth(e) {
   }
   await mottoCard(GAME.motto && GAME.motto.end);
   const all = loadReports(); all.unshift(rep); store(reportsKey(), JSON.stringify(all.slice(0, 30)));
+  G.over = 1; clearRebirth();
   await card(['推演报告已保存。', '', '标题画面的「推演报告」里可以随时翻看。', '换一种选择，再来一次「重生」吧！'], { lh: 40 });
   UI.stack.length = 0;
   titleLoop();

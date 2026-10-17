@@ -16,8 +16,8 @@ module.exports = H => ({
     const west = [H.enter('Y'), H.door('王宫'), H.toWorld('Y'), H.enter('K'), H.enter('M'), H.enter('B'), H.npc('大夏商人'), H.door('客舍')]; // → 决策 2、3
     const home = [H.door('你的毡帐'), H.enter('L'), H.toWorld('L'), H.enter('A')];        // 再被抓 → 趁乱逃 → 长安
     return [
-      { name: '等待·不带家人·讲报仇·南山', picks: { d1: 1, family: 1, d2: 0, d3: 0 }, steps: [...camp, ...west, H.toWorld('B'), H.enter('H'), H.enter('C'), ...home], ending: '十三年，两人还' },
-      { name: '现在走·带家人·请月氏派人·北道', picks: { d1: 0, family: 0, d2: 2, d3: 1 }, steps: [...camp, ...west, ...home], ending: '带回月氏使者' },
+      { name: '等待·不带家人·讲报仇·南山', picks: { d1: 1, family: 1, d2: 0, d3: 0 }, resumeAt: camp.length + 1, steps: [...camp, ...west, H.toWorld('B'), H.enter('H'), H.enter('C'), ...home], ending: '十三年，两人还' },
+      { name: '现在走·带家人·请月氏派人·北道', picks: { d1: 0, family: 0, d2: 2, d3: 1 }, resumeAt: camp.length + 6, steps: [...camp, ...west, ...home], ending: '带回月氏使者' },
       { name: '等待·带家人·许诺重礼·绕道身毒', picks: { d1: 1, family: 0, d2: 1, d3: 2 }, steps: [...camp, ...west], ending: '西南的路没走通' },
       { name: '不走了', picks: { d1: 2 }, steps: [H.door('你的毡帐')], ending: '留在了草原' },
       { name: '等待·不带家人·记下西域·留在大夏', picks: { d1: 1, family: 1, d2: 3, d3: 3 }, steps: [...camp, ...west], ending: '留在了大夏' },

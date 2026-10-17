@@ -1,13 +1,14 @@
 'use strict';
 // ===== 存读档 =====
 const saveKey = slot => `${GAME.id}_save_${slot}`;
+const rbKey = slot => `${GAME.id}_rb_${slot}`; // 重生的进度不占正史存档
 function fmtTime(ms) { const m = Math.floor(ms / 60000); return `${Math.floor(m / 60)}时${String(m % 60).padStart(2, '0')}分`; }
 function saveGame(slot) {
   const meta = { place: MapScene.map ? MapScene.map.name : '', time: G.time, ch: GAME.chapters[G.flags.ch || 0], cards: cardCount() };
-  store(isRebirth() ? `${GAME.id}_rb_${slot}` : saveKey(slot), JSON.stringify({ G, meta })); // 重生的进度不占正史存档
+  store(isRebirth() ? rbKey(slot) : saveKey(slot), JSON.stringify({ G, meta }));
 }
-function loadSlot(slot) { try { const s = store(saveKey(slot)); return s ? JSON.parse(s) : null; } catch (e) { return null; } }
-function autosave() { if (G) saveGame(0); }
+function loadSlot(slot, key = saveKey) { try { const s = store(key(slot)); return s ? JSON.parse(s) : null; } catch (e) { return null; } }
+function autosave() { if (G && !G.over) saveGame(0); } // over：重生一局已结束，剧情里还没跑完的 autosave 不能把它存回去
 function slotLabel(s) { const d = loadSlot(s); const nm = s === 0 ? '自动' : `档案${s}`; if (!d) return { label: `${nm}　——　空`, disabled: true }; const m = d.meta; return { label: `${nm}　${m.ch}`, right: `${m.place} 卡${m.cards} ${fmtTime(m.time)}` }; }
 async function loadGameData(d) {
   G = d.G;
@@ -28,7 +29,7 @@ async function loadMenu(fromTitle) {
   return true;
 }
 async function saveMenu() {
-  if (isRebirth()) { await narr('（重生一局不长，不用存档。）'); return; }
+  if (isRebirth()) { await narr('（重生会在进城、歇息时自动存档。下次从标题画面的「重生」接着玩。）'); return; }
   const items = [1, 2, 3].map(s => { const l = slotLabel(s); return { label: l.label, right: l.right }; });
   const c = await menu(items, { x: 40, y: 140, w: W - 80, title: '保存进度（进城和章节开始时会自动存档）' });
   if (c < 0) return;
@@ -191,7 +192,7 @@ async function titleLoop() {
       await STORY.intro();
       return;
     }
-    if (k === 'rebirth') { await startRebirth(); return; }
+    if (k === 'rebirth') { if (await rebirthEntry()) return; }
     if (k === 'load') { if (await loadMenu(true)) return; }
     if (k === 'reports') await reportsMenu();
     if (k === 'set') await settingsMenu();

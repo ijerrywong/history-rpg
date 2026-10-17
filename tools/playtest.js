@@ -53,20 +53,39 @@ const fails = [];
   // —— 重生路径：每条路径用指定的选择（picks）走到结局 ——
   if (spec.rebirth) {
     const got = new Set();
-    for (const P of spec.rebirth) {
+    const rbBoot = async P => {
       const r = boot(story);
       await r.pumpUntil(() => r.R('Scene === MapScene') && r.idle());
       r.R(`markCleared(); globalThis.__picks = ${JSON.stringify(P.picks || {})};
         const _end = endRebirth; endRebirth = async e => { globalThis.lastRb = { G, e }; return _end(e); };`);
+      return r;
+    };
+    for (const P of spec.rebirth) {
+      let r = await rbBoot(P), resumed = '';
       await r.act('await startRebirth()');
-      for (const code of P.steps) await r.act(code);
+      // resumeAt：走到第几步时关掉网页，换一个新沙盒读重生存档接着走
+      const cut = P.resumeAt ?? P.steps.length;
+      for (const code of P.steps.slice(0, cut)) await r.act(code);
+      if (cut < P.steps.length) {
+        const save = r.R('store(rbKey(0))');
+        if (r.errors.length) fails.push(`重生路径出错（续玩前）：${P.name}\n` + r.errors.join('\n'));
+        r = await rbBoot(P);
+        if (!save) fails.push(`重生路径续玩不了：${P.name}（第 ${cut} 步时没有重生存档）`);
+        else {
+          r.R(`store(rbKey(0), ${JSON.stringify(save)})`);
+          await r.act('await rebirthEntry()'); // 标题画面「重生」→ 接着上次的
+          resumed = `，第 ${cut} 步关掉后从「${r.R('MapScene.map.name')}」续玩`;
+          for (const code of P.steps.slice(cut)) await r.act(code);
+        }
+      }
+      if (r.R('store(rbKey(0))') !== null) fails.push(`重生结局后存档没清掉：${P.name}`);
       const end = r.R('globalThis.lastRb ? lastRb.e.title : null');
       const choices = r.R('lastRb ? lastRb.G.log.filter(x => x.k === "decide").map(x => x.id + "=" + x.choice).join("；") : ""');
       const reports = r.R('loadReports().length');
       r.R('lastRb && Object.keys(lastRb.G.cards).forEach(k => globalThis.__got = (globalThis.__got || []).concat(k))');
       for (const k of r.R('globalThis.__got || []')) got.add(k);
       const ok = end === P.ending && reports === 1 && !r.errors.length;
-      console.log(`重生 ${ok ? '✓' : '✗'} ${P.name} → ${end || '没走到结局'}（${choices}）`);
+      console.log(`重生 ${ok ? '✓' : '✗'} ${P.name} → ${end || '没走到结局'}（${choices}）${resumed}`);
       if (!ok) fails.push(`重生路径不对：${P.name}（期望「${P.ending}」，实际「${end}」，报告 ${reports} 份）` + (r.errors.length ? '\n' + r.errors.join('\n') : ''));
     }
     const rbCards = g.R('Object.keys(CARDS).filter(id => CARDS[id].rebirth)'), lack = rbCards.filter(k => !got.has(k));

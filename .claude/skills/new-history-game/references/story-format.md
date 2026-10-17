@@ -131,6 +131,7 @@ const REBIRTH = {
 
 只在重生里拿的史料卡加 `rebirth: true`（不算进正史的收集数）。
 试玩开关：网址后面加 `?rebirth` 或 `#rebirth`，不用先通关就能进重生。
+续玩：重生进度只有一份，和正史存档分开，进城、`chapter()`、歇息时自动存；标题画面点「重生」会问接着上次的还是从头再来。`REBIRTH.intro()` 末尾放好场景后照常 `autosave()`。剧本不要在 `decide` 前后的半截剧情里存档，读档后那段剧情接不上。
 
 ## tests/<id>.test.js —— 试玩脚本（必写）
 ```js
@@ -144,7 +145,8 @@ steps 要走到每一张卡、每一个任务；routes 至少检查：每段主�
 
 有重生线时再加 `rebirth`，每条路径从 `startRebirth()` 开局走到一个结局（范例：`tests/zhangqian.test.js`）：
 ```js
-  rebirth: [{ name: '路径名', picks: { 决策id: 选项序号, '决策id:why': 理由序号 }, steps: [H.door('…'), H.enter('L')], ending: '结局 title' }],
+  rebirth: [{ name: '路径名', picks: { 决策id: 选项序号, '决策id:why': 理由序号 }, resumeAt?: 步数, steps: [H.door('…'), H.enter('L')], ending: '结局 title' }],
 ```
 `picks` 按 `decide` 的 id 指定自动玩家选哪个（没写的选第一个能选的）；`ending` 要和 `endRebirth` 的 `title` 一字不差。
 所有路径合起来要拿到每一张 `rebirth: true` 的卡。
+`resumeAt`：走完前几步就「关掉网页」，换一个新沙盒从标题画面「重生 → 接着上次的」续玩剩下的步骤。至少挑一条路径，在进城（自动存档点）之后续玩。
