@@ -7,7 +7,7 @@ This project is split-licensed.
 
 | 部分 Part | 包含 Paths | 协议 License |
 |---|---|---|
-| 引擎、工具、工序 Engine, tools, workflows | `js/engine/`、`tools/`、`build.py`、`index.html`、`mac/`（题材图标除外）、`tests/fixtures/`、`.claude/`、`CLAUDE.md` | [MPL-2.0](LICENSE) |
+| 引擎、工具、工序 Engine, tools, workflows | `js/engine/`、`tools/`、`build.py`、`index.html`、`mac/`（题材图标除外）、`tests/fixtures/`、`.claude/`、`AGENTS.md`、`kids/` | [MPL-2.0](LICENSE) |
 | 题材内容 Story content | `js/story/`、`tests/<题材>.test.js`、`docs/`、`mac/<题材>-icon.png`、`mac/<题材>.icns` | [CC BY-NC-SA 4.0](LICENSE-CONTENT) |
 | 史料卡图片 Card images | `img/cards/` | 各图原有许可，见 [CREDITS.md](CREDITS.md) / original licenses per image |
 

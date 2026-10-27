@@ -10,6 +10,7 @@
 - `docs/<id>/` —— 史料核查表和大纲；`docs/adr/` —— 架构决策记录（重生模式、美术方向、开场引文）
 - `docs/private/` —— 商业模式和商业思考，**不进 git**（已在 .gitignore）；商业内容一律写这里，不写进 ADR
 - `tools/` —— playtest.js、engine-check.js、commons.py、pinyin_scan.py、gallery.html
+- `kids/` —— 孩子模式的设置清单和权限模板（孩子用 Claude Code + DeepSeek 做游戏，家长审）；系统提示是输出风格 `.claude/output-styles/xiaoshiguan.md`
 
 ## 授权
 分开授权，详见 `COPYRIGHT.md`：引擎、工具、工序用 MPL-2.0（`LICENSE`）；题材内容（`js/story/`、`docs/`、题材测试和图标）用 CC BY-NC-SA 4.0（`LICENSE-CONTENT`）；图片按 CREDITS.md。新增文件时按这个划分归类，有歧义先问。
@@ -25,5 +26,6 @@ mac/build_mac.sh zhangqian          # 分发版：dist/<标题>.app 和 dist/<�
 ## 做事走 skill
 - 新题材、补章节 → `new-history-game`（会派子代理 `history-fact-checker` 查史实）
 - 配图 → `card-images`；拼音 → `pinyin-pass`；新建筑/地标造型 → `scene-art`
+- 孩子做游戏 → `kid-history-game`（只在孩子电脑的「小史官」输出风格下用）；审孩子的 PR → `review-kid-pr`
 
 《张骞传》（五章完整版）已发布的 Artifact：https://claude.ai/artifact/8dMHsc9wQXNXqNUuN4wwoB（发 index.html + files；更新时用同一个 file_path）
