@@ -1,0 +1,33 @@
+{
+  "outputStyle": "小史官",
+  "permissions": {
+    "allow": [
+      "Bash(node tools/playtest.js:*)",
+      "Bash(node tools/engine-check.js)",
+      "Bash(python3 build.py:*)",
+      "Bash(git status:*)",
+      "Bash(git diff:*)",
+      "Bash(git log:*)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(git checkout -b:*)"
+    ],
+    "deny": [
+      "Edit(js/engine/**)",
+      "Edit(tools/**)",
+      "Edit(mac/**)",
+      "Edit(.claude/**)",
+      "Edit(build.py)",
+      "Edit(index.html)",
+      "Edit(AGENTS.md)",
+      "Edit(js/story/zhangqian.js)",
+      "Bash(git push *main*)",
+      "Bash(git push --force:*)",
+      "Bash(git push -f:*)",
+      "Bash(git reset --hard:*)",
+      "Bash(git remote:*)",
+      "Bash(rm -rf:*)",
+      "Agent(history-fact-checker)"
+    ]
+  }
+}

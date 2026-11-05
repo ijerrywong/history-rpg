@@ -25,6 +25,8 @@ const fails = [];
   }
   const missing = g.R('Object.keys(CARDS).filter(id => !CARDS[id].rebirth && !lastG.cards[id])'), mainN = g.R('Object.keys(CARDS).filter(id => !CARDS[id].rebirth).length');
   console.log(`史料卡：${mainN - missing.length} / ${mainN}`, missing.length ? '缺：' + missing.join('、') : '');
+  const unchecked = g.R("Object.keys(CARDS).filter(id => CARDS[id].check === '待核').map(id => CARDS[id].title)");
+  if (unchecked.length) console.log(`待核的史料卡（只提示，不算失败）：${unchecked.join('、')}`);
   if (spec.allCards !== false && missing.length) fails.push('有史料卡拿不到：' + missing.join('、'));
   const qs = g.R('JSON.stringify(lastG.quests)'); console.log('任务：', qs);
   for (const q of g.R('Object.keys(QUESTS)')) if (!g.R(`lastG.quests[${JSON.stringify(q)}] && lastG.quests[${JSON.stringify(q)}].st === 'done'`)) fails.push('任务没完成：' + q);
