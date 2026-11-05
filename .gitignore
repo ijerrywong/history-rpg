@@ -11,3 +11,6 @@ docs/private/
 
 # 各人本机的 Claude Code 设置（孩子模式的模板在 kids/）
 .claude/settings.local.json
+
+# 给自己运行的临时命令
+临时-运行命令.md
